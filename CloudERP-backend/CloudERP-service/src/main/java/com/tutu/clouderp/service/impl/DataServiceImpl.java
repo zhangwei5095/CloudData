@@ -74,22 +74,24 @@ public class DataServiceImpl implements DataService {
 	@GET
 	@Path("/r")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<DBObject> read(@QueryParam("mid") String mid,
+	public List<Map<String,Object>> read(@QueryParam("mid") String mid,
 			@QueryParam("page") Integer page,
 			@QueryParam("pagesize") Integer pagesize) {
 		return getData(mid, 1, 10);
 	}
 
-	public List<DBObject> getData(String collectionName, int page, int pagesize) {
-		List<DBObject> data = new ArrayList<>();
+	public List<Map<String,Object>> getData(String collectionName, int page, int pagesize) {
+		List<Map<String,Object>> data = new ArrayList<>();
 		int skip = (page - 1) * pagesize;
 		DBCursor dbCursor = getCollection(collectionName).find().sort(null)
 				.skip(skip).limit(pagesize);
 		while (dbCursor.hasNext()) {
 			DBObject dbObject = dbCursor.next();
-			data.add(dbObject);
+			dbObject.put("_id", dbObject.get("_id").toString());
+			
+			data.add(dbObject.toMap());
 		}
-
+		logger.debug(data.toString());
 		return data;
 	}
 

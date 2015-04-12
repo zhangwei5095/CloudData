@@ -22,7 +22,8 @@ angular
     'ui.bootstrap',
     'react',
     'ui.select',
-    'restangular'
+    'restangular',
+    'ngGrid'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -53,6 +54,10 @@ angular
       .when('/jsx', {
         templateUrl: 'views/jsx.html',
         controller: 'JsxCtrl'
+      })
+      .when('/data/:mid',{
+        templateUrl: 'views/grid.html',
+        controller: 'DataCtrl'
       })
       .otherwise({
         redirectTo: '/'
