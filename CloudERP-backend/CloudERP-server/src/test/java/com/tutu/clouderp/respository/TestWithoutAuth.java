@@ -11,6 +11,7 @@ import org.mongodb.morphia.Morphia;
 
 import com.mongodb.Mongo;
 import com.tutu.clouderp.model.MF;
+import com.tutu.clouderp.model.MFCheckBox;
 import com.tutu.clouderp.model.MFDate;
 import com.tutu.clouderp.model.MFNumber;
 import com.tutu.clouderp.model.MFSelect;
@@ -54,10 +55,16 @@ public class TestWithoutAuth {
 		mfNumber.setKey("age");
 		mfNumber.setLabel("年龄");
 		
+		MFCheckBox mfCheckBox=new MFCheckBox();
+		mfCheckBox.setLabel("是否结婚");
+		mfCheckBox.setKey("isMarried");
+		
 		mfs.add(mfText);
 		mfs.add(mfDate);
 		mfs.add(mfSelect);
 		mfs.add(mfNumber);
+		mfs.add(mfCheckBox);
+		
 		mt.setMfs(mfs);
 		ds.save(mt);
 	}

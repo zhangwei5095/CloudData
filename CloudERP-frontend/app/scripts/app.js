@@ -35,7 +35,7 @@ angular
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
-      .when('/formly', {
+      .when('/formly/:mid', {
         templateUrl: 'views/formly.html',
         controller: 'FormlyCtrl'
       })

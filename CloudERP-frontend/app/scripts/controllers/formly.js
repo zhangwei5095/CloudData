@@ -8,12 +8,16 @@
  * Controller of the cloudErpFrontendApp
  */
 angular.module('cloudErpFrontendApp')
-  .controller('FormlyCtrl', function($scope,Restangular) {
+  .controller('FormlyCtrl', function($scope,$rootScope,$routeParams,$location,Restangular) {
     $scope.formData = {};
-    
-    Restangular.one('mt', '5527c6414936c1b268c45233').get().then(function(mt){
-      $scope.formFields=mt.mfs;
+
+    angular.forEach($rootScope.mts,function(mt){
+      if(mt.id===$routeParams.mid)
+        $scope.mfs=mt.mfs;
     });
+    
+    $scope.formFields=$scope.mfs;
+    
     
     $scope.formFields2 = [{
       id:null,
@@ -118,6 +122,7 @@ angular.module('cloudErpFrontendApp')
     $scope.onSubmit = function() {
       $scope.submittedData = $scope.formData;
       console.log($scope.submittedData);
-      Restangular.all('data/c').post($scope.submittedData,{mid:'5527c6414936c1b268c45233'});
+      Restangular.all('data/c').post($scope.submittedData,{mid:$routeParams.mid});
+      $location.path('data/'+$routeParams.mid);
     }
   });

@@ -4,6 +4,7 @@ angular.module('cloudErpFrontendApp')
   .controller('DataCtrl', function($scope,$rootScope,$routeParams,Restangular) {
   	$scope.realData = [];
   	$scope.colDef =[];
+  	$scope.mid=$routeParams.mid;
   	Restangular.all('data/r').getList({mid: $routeParams.mid,page:1,pagesize:10}).then(function(queryData){
 		$scope.realData = Restangular.stripRestangular(queryData);
 		angular.forEach($rootScope.mts,function(mt){
