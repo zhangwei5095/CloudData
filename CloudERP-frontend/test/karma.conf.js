@@ -41,6 +41,8 @@ module.exports = function(config) {
       'bower_components/angular-ui-select/dist/select.js',
       'bower_components/lodash/lodash.js',
       'bower_components/restangular/dist/restangular.js',
+      'bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
+      'bower_components/ng-grid/build/ng-grid.js',
       'bower_components/angular-ui-grid/ui-grid.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower

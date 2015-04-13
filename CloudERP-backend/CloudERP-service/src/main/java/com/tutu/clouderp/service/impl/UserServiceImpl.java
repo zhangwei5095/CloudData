@@ -2,6 +2,7 @@ package com.tutu.clouderp.service.impl;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -9,6 +10,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -25,10 +27,11 @@ import com.tutu.clouderp.dto.UserTransfer;
 import com.tutu.clouderp.dto.auth.User;
 import com.tutu.clouderp.session.PwdUtils;
 import com.tutu.clouderp.session.TokenUtils;
+
 @Service("userService")
 @Path("/user")
-public class UserServiceImpl implements UserService{
-	private final Logger logger=LoggerFactory.getLogger(this.getClass());
+public class UserServiceImpl implements UserService {
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Resource
 	private SystemDatastore systemDatastore;
 
@@ -39,13 +42,12 @@ public class UserServiceImpl implements UserService{
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public UserTransfer getUser()
-	{
-		User user=ContextHolder.getContext().getUser();
-		if(user==null) return null;
+	public UserTransfer getUser() {
+		User user = ContextHolder.getContext().getUser();
+		if (user == null)
+			return null;
 		return new UserTransfer(user.getName(), createRoleMap(user));
 	}
-
 
 	/**
 	 * Authenticates a user and creates an authentication token.
@@ -59,27 +61,31 @@ public class UserServiceImpl implements UserService{
 	@Path("authenticate")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public TokenTransfer authenticate(@FormParam("username") String username, @FormParam("password") String password)
-	{
-		
-		User user = systemDatastore.get(User.class,username);
-        try {
+	public TokenTransfer authenticate(@FormParam("username") String username, @FormParam("password") String password) {
+
+		User user = systemDatastore.get(User.class, username);
+		try {
 			if (user == null || !user.getPassword().equals(PwdUtils.eccrypt(password))) {
 				throw new WebApplicationException(401);
 			}
 		} catch (NoSuchAlgorithmException e) {
-			logger.error("some thing wrong",e);
+			logger.error("some thing wrong", e);
 		}
-        return new TokenTransfer(TokenUtils.createToken(user));
+		return new TokenTransfer(TokenUtils.createToken(user));
 	}
 
-
-	private Map<String, Boolean> createRoleMap(User user)
-	{
+	private Map<String, Boolean> createRoleMap(User user) {
 		Map<String, Boolean> roles = new HashMap<String, Boolean>();
-//		for (String role : user.getRoles()) {
-//			roles.put(role, Boolean.TRUE);
-//		}
+		// for (String role : user.getRoles()) {
+		// roles.put(role, Boolean.TRUE);
+		// }
 		return roles;
+	}
+
+	@Path("filterByOrg/{orgId}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> getUsersByOrg(@PathParam("orgId") String orgId) {
+		return systemDatastore.find(User.class,"orgId",orgId).asList();
 	}
 }

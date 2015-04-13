@@ -122,7 +122,8 @@ angular.module('cloudErpFrontendApp')
     $scope.onSubmit = function() {
       $scope.submittedData = $scope.formData;
       console.log($scope.submittedData);
-      Restangular.all('data/c').post($scope.submittedData,{mid:$routeParams.mid});
-      $location.path('data/'+$routeParams.mid);
+      Restangular.all('data/c').post($scope.submittedData,{mid:$routeParams.mid}).then(function(response){
+        $location.path('data/'+$routeParams.mid);
+      });
     }
   });

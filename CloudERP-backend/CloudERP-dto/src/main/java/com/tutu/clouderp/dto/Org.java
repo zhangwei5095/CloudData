@@ -1,34 +1,45 @@
 package com.tutu.clouderp.dto;
 
+import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Reference;
+
 @Entity("org")
 public class Org {
 	@Id
 	private String id;
-	@Reference(value="pid",idOnly=true)
-	private Org parentOrg;
+	private List<Org> children;
+	@JsonProperty("label")
 	private String name;
-	public Org(){
+
+	public Org() {
 		super();
 	}
+
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
-	public Org getParentOrg() {
-		return parentOrg;
-	}
-	public void setParentOrg(Org parentOrg) {
-		this.parentOrg = parentOrg;
-	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public List<Org> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<Org> children) {
+		this.children = children;
+	}
+
 }

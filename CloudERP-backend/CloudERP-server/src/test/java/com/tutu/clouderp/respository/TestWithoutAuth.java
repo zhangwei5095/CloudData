@@ -10,6 +10,8 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import com.mongodb.Mongo;
+import com.tutu.clouderp.dto.Org;
+import com.tutu.clouderp.dto.auth.User;
 import com.tutu.clouderp.model.MF;
 import com.tutu.clouderp.model.MFCheckBox;
 import com.tutu.clouderp.model.MFDate;
@@ -22,7 +24,7 @@ public class TestWithoutAuth {
 	public Datastore ds;
 	@Before
 	public void initDs() throws UnknownHostException{
-		Mongo mongo=new Mongo("localhost",27017);
+		Mongo mongo=new Mongo("10.255.242.25",27017);
 		ds=new Morphia().createDatastore(mongo, "sysmongo");
 	}
 	
@@ -68,4 +70,28 @@ public class TestWithoutAuth {
 		mt.setMfs(mfs);
 		ds.save(mt);
 	}
+	@Test
+	public void createOrg(){
+		Org org=new Org();
+		org.setId("1");
+		org.setName("总公司");
+		
+		List<Org> children=new ArrayList<Org>();
+		Org org1=new Org();
+		org1.setName("分公司");
+		org1.setId("2");
+		children.add(org1);
+		
+		org.setChildren(children);
+		
+		ds.save(org);
+	}
+	@Test
+	public void createUser(){
+		User user=new User();
+		user.setName("测试用户");
+		user.setOrgId("1");
+		ds.save(user);
+	}
+	
 }

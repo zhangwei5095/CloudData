@@ -10,7 +10,9 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
-    <link rel="stylesheet" href="bower_components/angular-ui-grid/ng-grid.min.css" />
+    <link rel="stylesheet" href="bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css" />
+    <link rel="stylesheet" href="bower_components/ng-grid/ng-grid.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -43,6 +45,12 @@
             <ul class="nav navbar-nav">
               <li class="active"><a href="#/">Home</a></li>
               <li ng-repeat="menu in menus"><a ng-href="#/{{menu.href}}" ui-sref-active="active">{{menu.name}}</a></li>
+              <li class="dropdown" id="settingMenu">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">设置<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a ng-href="#/org">机构</a></li>
+                        </ul>
+                    </li>
             </ul>
           </div>
         </div>
@@ -95,7 +103,9 @@
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/restangular/dist/restangular.js"></script>
-    <script src="bower_components/angular-ui-grid/ng-grid-2.0.14.min.js"></script>
+    <script src="bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js"></script>
+    <script src="bower_components/ng-grid/build/ng-grid.js"></script>
+    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -112,6 +122,7 @@
         <script src="scripts/controllers/autofield.js"></script>
         <script src="scripts/controllers/react.js"></script>
         <script src="scripts/controllers/jsx.js"></script>
+        <script src="scripts/controllers/org.js"></script>
         <!-- endbuild -->
 </body>
 </html>

@@ -6,8 +6,6 @@ import java.util.Set;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
-
-import com.tutu.clouderp.dto.Org;
 @Entity("user")
 public class User{
 
@@ -16,13 +14,9 @@ public class User{
 	private String password;
 	@Reference
 	private Tenant tenant;
-	@Reference
-	private Org org;
+	private String orgId;
 	private Set<String> roles = new HashSet<String>();
-
-	protected User() {
-	}
-
+	public User(){};
 	public User(String name, String passwordHash) {
 		this.name = name;
 		this.password = passwordHash;
@@ -56,13 +50,6 @@ public class User{
 		this.password = password;
 	}
 
-	public Org getOrg() {
-		return org;
-	}
-
-	public void setOrg(Org org) {
-		this.org = org;
-	}
 
 	public Tenant getTenant() {
 		return tenant;
@@ -70,6 +57,12 @@ public class User{
 
 	public void setTenant(Tenant tenant) {
 		this.tenant = tenant;
+	}
+	public String getOrgId() {
+		return orgId;
+	}
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
 	}
 	
 }

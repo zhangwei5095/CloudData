@@ -23,7 +23,10 @@ angular
     'react',
     'ui.select',
     'restangular',
-    'ngGrid'
+    'ngGrid',
+    'ui.grid',
+    'ui.grid.pagination',
+    'angularBootstrapNavTree'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -58,6 +61,10 @@ angular
       .when('/data/:mid',{
         templateUrl: 'views/grid.html',
         controller: 'DataCtrl'
+      })
+      .when('/org',{
+        templateUrl: 'views/org.html',
+        controller: 'OrgCtrl'
       })
       .otherwise({
         redirectTo: '/'

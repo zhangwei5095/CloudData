@@ -8,28 +8,25 @@
  * Controller of the cloudErpFrontendApp
  */
 angular.module('cloudErpFrontendApp')
-	.controller('MainCtrl', function($scope,$rootScope,Restangular) {
+	.controller('MainCtrl', function($scope, $rootScope, Restangular) {
 		$scope.awesomeThings = [
 			'HTML5 Boilerplate',
 			'AngularJS',
 			'Karma'
 		];
 
-		Restangular.all('mt').getList().then(function(mts){
-			$rootScope.mts=Restangular.stripRestangular(mts);
-			angular.forEach($rootScope.mts,function(mt){
-    			var menu={
-					name:mt.name,
-					href:'data/'+mt.id
-				} ;
-    			$scope.menus.push(menu);
-    		});
+		Restangular.all('mt').getList().then(function(mts) {
+			$rootScope.mts = Restangular.stripRestangular(mts);
+			angular.forEach($rootScope.mts, function(mt) {
+				var menu = {
+					name: mt.name,
+					href: 'data/' + mt.id
+				};
+				$scope.menus.push(menu);
+			});
 		});
-      		
 
-    	
-			
-    	
+
 
 		$scope.menus = [{
 			name: "Formly",
@@ -46,8 +43,8 @@ angular.module('cloudErpFrontendApp')
 		}, {
 			name: 'jsx',
 			href: 'jsx'
-		},{
-			name:'grid',
-			href:'grid'
+		}, {
+			name: 'grid',
+			href: 'grid'
 		}];
 	});
