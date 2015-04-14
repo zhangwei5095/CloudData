@@ -4,13 +4,7 @@ angular.module('cloudErpFrontendApp')
 	.controller('DataCtrl', function($scope, $rootScope, $routeParams, $http, Restangular) {
 		$scope.realData = [];
 		$scope.mid = $routeParams.mid;
-		Restangular.all('data/r').getList({
-			mid: $routeParams.mid,
-			page: 1,
-			pagesize: 10
-		}).then(function(queryData) {
-			$scope.realData = Restangular.stripRestangular(queryData);
-		});
+		
 		angular.forEach($rootScope.mts, function(mt) {
 			if (mt.id === $routeParams.mid)
 				$scope.mfs = mt.mfs;
@@ -23,9 +17,9 @@ angular.module('cloudErpFrontendApp')
 		$scope.totalServerItems = 100;
 
 		$scope.pagingOptions = {
-			paginationPageSizes: [250, 500, 1000],
-			paginationPageSize: 250,
-			totalServerItems: 0,
+			paginationPageSizes: [2, 4, 6],
+			paginationPageSize: 4,
+			totalServerItems: 6,
 			paginationCurrentPage: 1
 		};
 
@@ -45,8 +39,8 @@ angular.module('cloudErpFrontendApp')
 					var ft = searchText.toLowerCase();
 					Restangular.all('data/r').getList({
 						mid: $routeParams.mid,
-						page: 1,
-						pagesize: 10
+						page: page,
+						pagesize: pageSize
 					}).then(function(queryData) {
 						$scope.realData = Restangular.stripRestangular(queryData);
 						$scope.setPagingData($scope.realData, page, pageSize);
@@ -54,8 +48,8 @@ angular.module('cloudErpFrontendApp')
 				} else {
 					Restangular.all('data/r').getList({
 						mid: $routeParams.mid,
-						page: 1,
-						pagesize: 10
+						page: page,
+						pagesize: pageSize
 					}).then(function(queryData) {
 						$scope.realData = Restangular.stripRestangular(queryData);
 						$scope.setPagingData($scope.realData, page, pageSize);
@@ -68,7 +62,7 @@ angular.module('cloudErpFrontendApp')
 
 		$scope.$watch('pagingOptions', function(newVal, oldVal) {
 			if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
-				$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+				$scope.getPagedDataAsync($scope.gridOptions.paginationPageSize, $scope.gridOptions.paginationCurrentPage, $scope.filterOptions.filterText);
 			}
 		}, true);
 		$scope.$watch('filterOptions', function(newVal, oldVal) {
@@ -80,7 +74,12 @@ angular.module('cloudErpFrontendApp')
 		$scope.gridOptions = {
 			data: 'realData',
 			columnDefs: [],
-			enablePagination: true
+			enablePagination: true,
+			enablePaginationControls
+			paginationPageSizes: [2, 4, 6],
+			paginationPageSize: 4,
+			totalServerItems: 6,
+			paginationCurrentPage: 1
 		};
 		angular.forEach($scope.mfs, function(mf) {
 			var columnDef = {

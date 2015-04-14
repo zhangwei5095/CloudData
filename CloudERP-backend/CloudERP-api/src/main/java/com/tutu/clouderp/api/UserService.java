@@ -11,5 +11,6 @@ import com.tutu.clouderp.dto.auth.User;
 public interface UserService {
 	public UserTransfer getUser();
 	public List<User> getUsersByOrg(String orgId);
+	public List<User> all();
 	public TokenTransfer authenticate(String username, String password);
 }

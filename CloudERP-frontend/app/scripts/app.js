@@ -62,6 +62,14 @@ angular
         templateUrl: 'views/grid.html',
         controller: 'DataCtrl'
       })
+      .when('/user',{
+        templateUrl: 'views/user.html',
+        controller: 'UserCtrl'
+      })
+      .when('/role',{
+        templateUrl: 'views/role.html',
+        controller: 'RoleCtrl'
+      })
       .when('/org',{
         templateUrl: 'views/org.html',
         controller: 'OrgCtrl'

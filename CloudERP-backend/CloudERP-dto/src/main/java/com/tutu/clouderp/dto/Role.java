@@ -1,10 +1,12 @@
 package com.tutu.clouderp.dto;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.mongodb.morphia.annotations.Id;
 
 public class Role {
 	@Id
 	private String id;
+	@JsonProperty("label")
 	private String name;
 
 	public String getId() {

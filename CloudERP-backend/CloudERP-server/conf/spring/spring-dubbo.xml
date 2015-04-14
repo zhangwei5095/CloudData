@@ -27,6 +27,8 @@
 		ref="mtService" protocol="dubbo,rest" />
 	<dubbo:service interface="com.tutu.clouderp.api.OrgService"
 		ref="orgService" protocol="dubbo,rest" />
+	<dubbo:service interface="com.tutu.clouderp.api.RoleService"
+		ref="roleService" protocol="dubbo,rest" />
 	<dubbo:service interface="com.tutu.clouderp.api.DataService"
 		ref="dataService" protocol="dubbo,rest" />
 	<!-- 设置超时时间 -->

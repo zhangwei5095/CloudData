@@ -46,9 +46,11 @@
               <li class="active"><a href="#/">Home</a></li>
               <li ng-repeat="menu in menus"><a ng-href="#/{{menu.href}}" ui-sref-active="active">{{menu.name}}</a></li>
               <li class="dropdown" id="settingMenu">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">设置<b class="caret"></b></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown">设置<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a ng-href="#/org">机构</a></li>
+                            <li><a ng-href="#/user">用户</a></li>
+                            <li><a ng-href="#/role">角色</a></li>
                         </ul>
                     </li>
             </ul>
@@ -123,6 +125,8 @@
         <script src="scripts/controllers/react.js"></script>
         <script src="scripts/controllers/jsx.js"></script>
         <script src="scripts/controllers/org.js"></script>
+        <script src="scripts/controllers/user.js"></script>
+        <script src="scripts/controllers/role.js"></script>
         <!-- endbuild -->
 </body>
 </html>

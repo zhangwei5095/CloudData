@@ -86,6 +86,13 @@ public class UserServiceImpl implements UserService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<User> getUsersByOrg(@PathParam("orgId") String orgId) {
-		return systemDatastore.find(User.class,"orgId",orgId).asList();
+		return systemDatastore.find(User.class, "orgId", orgId).asList();
+	}
+
+	@Path("all")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> all() {
+		return systemDatastore.find(User.class).asList();
 	}
 }

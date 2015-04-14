@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">角色列表</h3>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <span ng-if="doingAsync">...loading...</span>
+                        <abn-tree tree-data="roleData" tree-control="myTree" on-select="myTreeHandler(branch)"
+                                  expand-level="2" initial-selection="Granny Smith"></abn-tree>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="table"  ui-grid="gridOptions">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

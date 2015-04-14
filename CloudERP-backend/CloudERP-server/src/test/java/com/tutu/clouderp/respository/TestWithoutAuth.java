@@ -11,6 +11,7 @@ import org.mongodb.morphia.Morphia;
 
 import com.mongodb.Mongo;
 import com.tutu.clouderp.dto.Org;
+import com.tutu.clouderp.dto.Role;
 import com.tutu.clouderp.dto.auth.User;
 import com.tutu.clouderp.model.MF;
 import com.tutu.clouderp.model.MFCheckBox;
@@ -92,6 +93,24 @@ public class TestWithoutAuth {
 		user.setName("测试用户");
 		user.setOrgId("1");
 		ds.save(user);
+	}
+	
+	@Test
+	public void createRole(){
+		Role role=new Role();
+		role.setName("测试用户");
+		role.setId("1");
+		
+		Role role2=new Role();
+		role2.setName("管理员");
+		role2.setId("2");
+		
+		Role role3=new Role();
+		role3.setName("总经理");
+		role3.setId("3");
+		ds.save(role);
+		ds.save(role2);
+		ds.save(role3);
 	}
 	
 }
