@@ -10,7 +10,9 @@ import org.mongodb.morphia.annotations.Id;
 public class Org {
 	@Id
 	private String id;
-	private List<Org> children;
+	private String parentId;
+	private String parentIds;
+	private List<String> children;
 	@JsonProperty("label")
 	private String name;
 
@@ -34,12 +36,29 @@ public class Org {
 		this.name = name;
 	}
 
-	public List<Org> getChildren() {
+	public List<String> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<Org> children) {
+	public void setChildren(List<String> children) {
 		this.children = children;
+	}
+
+
+	public String getParentIds() {
+		return parentIds;
+	}
+
+	public void setParentIds(String parentIds) {
+		this.parentIds = parentIds;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 
 }

@@ -77,11 +77,11 @@ public class TestWithoutAuth {
 		org.setId("1");
 		org.setName("总公司");
 		
-		List<Org> children=new ArrayList<Org>();
+		List<String> children=new ArrayList<String>();
 		Org org1=new Org();
 		org1.setName("分公司");
 		org1.setId("2");
-		children.add(org1);
+		children.add("1");
 		
 		org.setChildren(children);
 		

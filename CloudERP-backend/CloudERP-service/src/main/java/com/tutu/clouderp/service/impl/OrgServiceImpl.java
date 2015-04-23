@@ -21,4 +21,10 @@ public class OrgServiceImpl extends BasicService implements OrgService{
 		return getDataStore().find(Org.class).asList();
 	}
 
+	@Override
+	public void addOrg(String name, String parentId) {
+		
+		
+	}
+
 }

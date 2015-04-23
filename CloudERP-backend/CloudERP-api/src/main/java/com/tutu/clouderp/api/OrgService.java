@@ -6,4 +6,6 @@ import com.tutu.clouderp.dto.Org;
 
 public interface OrgService {
 	public List<Org> list();
+	
+	public void addOrg(String name,String parentId);
 }

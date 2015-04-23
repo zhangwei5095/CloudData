@@ -75,7 +75,6 @@ angular.module('cloudErpFrontendApp')
 			data: 'realData',
 			columnDefs: [],
 			enablePagination: true,
-			enablePaginationControls
 			paginationPageSizes: [2, 4, 6],
 			paginationPageSize: 4,
 			totalServerItems: 6,

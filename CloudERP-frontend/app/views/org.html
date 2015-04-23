@@ -1,22 +1,12 @@
-<div class="row">
-    <div class="col-md-12">
-        <div class="box box-primary">
-            <div class="box-header">
-                <h3 class="box-title">机构树</h3>
+
+
+<div id="content" class="row">
+        <div id="left" class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle">组织机构<i class="icon-refresh pull-right" onclick="refreshTree();"></i></a>
             </div>
-            <div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <span ng-if="doingAsync">...loading...</span>
-                        <abn-tree tree-data="myTreeData" tree-control="myTree" on-select="myTreeHandler(branch)"
+            <abn-tree tree-data="myTreeData" tree-control="myTree" on-select="myTreeHandler(branch)"
                                   expand-level="2" initial-selection="Granny Smith"></abn-tree>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="table"  ui-grid="gridOptions">
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+        <div id="openClose" class="icon-close">&nbsp;</div>
     </div>
-</div>
