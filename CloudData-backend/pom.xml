@@ -3,19 +3,19 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<packaging>pom</packaging>
-	<artifactId>CloudERP</artifactId>
+	<artifactId>CloudData</artifactId>
 	<groupId>com.tutu</groupId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>CloudERP parent module</name>
+	<name>CloudData parent module</name>
 
 	<modules>
-		<module>CloudERP-api</module>
-		<module>CloudERP-server</module>
-		<module>CloudERP-server</module>
-		<module>CloudERP-dto</module>
-		<module>CloudERP-dao</module>
-    <module>CloudERP-service</module>
+		<module>CloudData-api</module>
+		<module>CloudData-server</module>
+		<module>CloudData-server</module>
+		<module>CloudData-dto</module>
+		<module>CloudData-dao</module>
+    <module>CloudData-service</module>
   </modules>
 
 	<properties>

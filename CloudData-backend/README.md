@@ -4,7 +4,7 @@
 
 #启动方式：
 
-	.CloudERP-server main run
+	.CloudData-server main run
 	
 #功能路线
 	.表字段配置

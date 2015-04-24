@@ -6,30 +6,30 @@
 	http://code.alibabatech.com/schema/dubbo
 	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 	<!-- 提供方应用信息，用于计算依赖关系 -->
-	<dubbo:application name="clouderp-rpc-services"></dubbo:application>
+	<dubbo:application name="clouddata-rpc-services"></dubbo:application>
 	<!-- 使用zookeeper注册中心暴露服务地址 -->
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.url}" />
 	<!-- 暴露用dubbo协议服务端口号 -->
 	<dubbo:protocol name="dubbo" port="${dubbo.port}" />
-	<!-- <dubbo:protocol name="rest" port="8080" threads="500" extension="com.tutu.clouderp.session.CORSFilter" 
+	<!-- <dubbo:protocol name="rest" port="8080" threads="500" extension="com.tutu.clouddata.session.CORSFilter" 
 		contextpath="rest"/> -->
 	<dubbo:protocol name="rest" port="8080" threads="500"
-		extension="com.tutu.clouderp.session.AuthFilter,com.tutu.clouderp.session.CORSFilter"
+		extension="com.tutu.clouddata.session.AuthFilter,com.tutu.clouddata.session.CORSFilter"
 		contextpath="rest" />
 	<!-- 声明需要暴露的服务接口 -->
-	<dubbo:service interface="com.tutu.clouderp.api.UserService"
+	<dubbo:service interface="com.tutu.clouddata.api.UserService"
 		ref="userService" protocol="dubbo,rest" />
-	<dubbo:service interface="com.tutu.clouderp.api.NewsEntryService"
+	<dubbo:service interface="com.tutu.clouddata.api.NewsEntryService"
 		ref="newsEntryService" protocol="dubbo,rest" />
-	<dubbo:service interface="com.tutu.clouderp.api.MMService"
+	<dubbo:service interface="com.tutu.clouddata.api.MMService"
 		ref="mmService" protocol="dubbo,rest" />
-	<dubbo:service interface="com.tutu.clouderp.api.MTService"
+	<dubbo:service interface="com.tutu.clouddata.api.MTService"
 		ref="mtService" protocol="dubbo,rest" />
-	<dubbo:service interface="com.tutu.clouderp.api.OrgService"
+	<dubbo:service interface="com.tutu.clouddata.api.OrgService"
 		ref="orgService" protocol="dubbo,rest" />
-	<dubbo:service interface="com.tutu.clouderp.api.RoleService"
+	<dubbo:service interface="com.tutu.clouddata.api.RoleService"
 		ref="roleService" protocol="dubbo,rest" />
-	<dubbo:service interface="com.tutu.clouderp.api.DataService"
+	<dubbo:service interface="com.tutu.clouddata.api.DataService"
 		ref="dataService" protocol="dubbo,rest" />
 	<!-- 设置超时时间 -->
 	<dubbo:provider timeout="5000" />

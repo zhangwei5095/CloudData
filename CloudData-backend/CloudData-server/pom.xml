@@ -5,29 +5,29 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.tutu</groupId>
-		<artifactId>CloudERP</artifactId>
+		<artifactId>CloudData</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>CloudERP-server</artifactId>
+	<artifactId>CloudData-server</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>com.tutu</groupId>
-			<artifactId>CloudERP-api</artifactId>
+			<artifactId>CloudData-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tutu</groupId>
-			<artifactId>CloudERP-dto</artifactId>
+			<artifactId>CloudData-dto</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tutu</groupId>
-			<artifactId>CloudERP-dao</artifactId>
+			<artifactId>CloudData-dao</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tutu</groupId>
-			<artifactId>CloudERP-service</artifactId>
+			<artifactId>CloudData-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

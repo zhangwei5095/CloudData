@@ -23,7 +23,7 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>conf/clouderp.properties</value>
+				<value>conf/clouddata.properties</value>
 				<value>conf/dubbo.properties</value>
 			</list>
 		</property>
@@ -31,21 +31,21 @@
 			<value>utf-8</value>
 		</property>
 	</bean>
-	<context:component-scan base-package="com.tutu.clouderp.service.impl" />
-	<bean class="com.tutu.clouderp.session.GlobalContext"/>
+	<context:component-scan base-package="com.tutu.clouddata.service.impl" />
+	<bean class="com.tutu.clouddata.session.GlobalContext"/>
 	<bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
 	<bean id="mongoClient" class="com.mongodb.MongoClient">
 		<constructor-arg name="host" value="${sysmongo.host}" />
 		<constructor-arg name="port" value="${sysmongo.port}" />
 	</bean>
 	<bean id="morphia" class="org.mongodb.morphia.Morphia" />
-	<bean id="systemDatastore" class="com.tutu.clouderp.auth.dao.SystemDatastore">
+	<bean id="systemDatastore" class="com.tutu.clouddata.auth.dao.SystemDatastore">
 		<constructor-arg name="morphia" ref="morphia" />
 		<constructor-arg name="mongoClient" ref="mongoClient" />
 		<constructor-arg name="dbName" value="${sysmongo.dbname}" />
 	</bean>
 	<!--  -->
 	<import resource="spring/spring-dubbo.xml" />
-	<!-- <bean id="dataBaseInitializer" class="com.tutu.clouderp.repository.DataBaseInitializer" 
+	<!-- <bean id="dataBaseInitializer" class="com.tutu.clouddata.repository.DataBaseInitializer" 
 		init-method="initDataBase"/> -->
 </beans>
