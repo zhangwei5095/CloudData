@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name cloudErpFrontendApp.controller:AboutCtrl
+ * @name clouddataFrontendApp.controller:AboutCtrl
  * @description
  * # AboutCtrl
- * Controller of the cloudErpFrontendApp
+ * Controller of the clouddataFrontendApp
  */
-var app = angular.module('cloudErpFrontendApp');
+var app = angular.module('clouddataFrontendApp');
 app.controller('ReactCtrl', function($scope) {
 	$scope.person = {
 		fname: 'Clark',

@@ -1,4 +1,4 @@
-angular.module('cloudErpFrontendApp')
+angular.module('clouddataFrontendApp')
 .controller('AutoFieldCtrl', ['$scope', function ($scope) {
     $scope.user = {
         username: '',

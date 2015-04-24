@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cloudErpFrontendApp')
+angular.module('clouddataFrontendApp')
 	.controller('DataCtrl', function($scope, $rootScope, $routeParams, $http, Restangular) {
 		$scope.realData = [];
 		$scope.mid = $routeParams.mid;

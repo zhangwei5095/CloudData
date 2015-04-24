@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cloudErpFrontendApp')
+angular.module('clouddataFrontendApp')
 	.controller('RoleCtrl', function($scope, $rootScope, $routeParams, $timeout, Restangular) {
 		$scope.roleResource = [];
 		$scope.gridOptions = {

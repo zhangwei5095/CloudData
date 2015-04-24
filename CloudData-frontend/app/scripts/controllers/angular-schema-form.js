@@ -1,4 +1,4 @@
-angular.module('cloudErpFrontendApp')
+angular.module('clouddataFrontendApp')
   .controller('FormCtrl', function($scope) {
     $scope.schema = {
       type: "object",

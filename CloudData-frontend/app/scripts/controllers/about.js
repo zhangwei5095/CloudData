@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name cloudErpFrontendApp.controller:AboutCtrl
+ * @name clouddataFrontendApp.controller:AboutCtrl
  * @description
  * # AboutCtrl
- * Controller of the cloudErpFrontendApp
+ * Controller of the clouddataFrontendApp
  */
-angular.module('cloudErpFrontendApp')
+angular.module('clouddataFrontendApp')
   .controller('AboutCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',

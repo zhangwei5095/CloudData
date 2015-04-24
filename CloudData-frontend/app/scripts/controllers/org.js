@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cloudErpFrontendApp')
+angular.module('clouddataFrontendApp')
 	.controller('OrgCtrl', function($scope, $rootScope, $routeParams, $timeout, Restangular) {
 		$scope.users = [];
 		$scope.myTreeHandler = function(branch) {

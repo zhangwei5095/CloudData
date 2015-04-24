@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('cloudErpFrontendApp');
+var app = angular.module('clouddataFrontendApp');
 
 app.controller('JsxCtrl', function($scope) {
 	$scope.person = {

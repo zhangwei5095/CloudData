@@ -2,14 +2,14 @@
 
 /**
  * @ngdoc overview
- * @name cloudErpFrontendApp
+ * @name clouddataFrontendApp
  * @description
- * # cloudErpFrontendApp
+ * # clouddataFrontendApp
  *
  * Main module of the application.
  */
 angular
-  .module('cloudErpFrontendApp', [
+  .module('clouddataFrontendApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',

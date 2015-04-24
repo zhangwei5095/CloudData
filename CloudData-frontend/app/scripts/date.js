@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-  angular.module('cloudErpFrontendApp')
+  angular.module('clouddataFrontendApp')
     .directive('dateButton', function() {
       var linkFn = function link(scope) {
         scope.options.open = false;

@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name cloudErpFrontendApp.controller:FormlyCtrl
+ * @name clouddataFrontendApp.controller:FormlyCtrl
  * @description
  * # FormlyCtrl
- * Controller of the cloudErpFrontendApp
+ * Controller of the clouddataFrontendApp
  */
-angular.module('cloudErpFrontendApp')
+angular.module('clouddataFrontendApp')
   .controller('FormlyCtrl', function($scope,$rootScope,$routeParams,$location,Restangular) {
     $scope.formData = {};
 
