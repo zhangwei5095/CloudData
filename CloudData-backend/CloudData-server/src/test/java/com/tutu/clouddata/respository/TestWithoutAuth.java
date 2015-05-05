@@ -81,11 +81,14 @@ public class TestWithoutAuth {
 		Org org1=new Org();
 		org1.setName("分公司");
 		org1.setId("2");
-		children.add("1");
+		org1.setPid("1");
+		org1.setParentIds("1");
+		children.add("2");
 		
 		org.setChildren(children);
 		
 		ds.save(org);
+		ds.save(org1);
 	}
 	@Test
 	public void createUser(){

@@ -11,20 +11,26 @@ import org.springframework.stereotype.Service;
 
 import com.tutu.clouddata.api.OrgService;
 import com.tutu.clouddata.dto.Org;
+import com.tutu.clouddata.dto.tree.TreeBuilder;
 import com.tutu.clouddata.service.BasicService;
+
 @Service("orgService")
 @Path("/org")
-public class OrgServiceImpl extends BasicService implements OrgService{
+public class OrgServiceImpl extends BasicService implements OrgService {
+	@SuppressWarnings("unchecked")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Org> list() {
-		return getDataStore().find(Org.class).asList();
+		List<Org> orgs = getDataStore().find(Org.class).asList();
+		@SuppressWarnings("rawtypes")
+		TreeBuilder treeBuilder = new TreeBuilder(orgs);
+		List<Org> orgTree = treeBuilder.buildTree();
+		return orgTree;
 	}
 
 	@Override
 	public void addOrg(String name, String parentId) {
-		
-		
+
 	}
 
 }
