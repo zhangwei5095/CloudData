@@ -2,9 +2,15 @@ package com.tutu.clouddata.api;
 
 import java.util.List;
 
+import com.tutu.clouddata.model.MFJsonViews;
 import com.tutu.clouddata.model.MT;
 
 public interface MTService {
-	public List<MT> list();
-	public MT mt(String mid);
+	List<MT> list();
+
+	MT mt(String mid);
+
+	void save(MT mt);
+
+	void addMf(MFJsonViews mf, String mtid);
 }

@@ -74,6 +74,10 @@ angular
         templateUrl: 'views/org.html',
         controller: 'OrgCtrl'
       })
+      .when('/mt',{
+        templateUrl: 'views/mt.html',
+        controller: 'MtCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

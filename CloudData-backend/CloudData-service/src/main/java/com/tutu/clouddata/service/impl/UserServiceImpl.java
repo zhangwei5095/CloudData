@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -61,11 +62,13 @@ public class UserServiceImpl implements UserService {
 	@Path("authenticate")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public TokenTransfer authenticate(@FormParam("username") String username, @FormParam("password") String password) {
+	public TokenTransfer authenticate(@FormParam("username") String username,
+			@FormParam("password") String password) {
 
 		User user = systemDatastore.get(User.class, username);
 		try {
-			if (user == null || !user.getPassword().equals(PwdUtils.eccrypt(password))) {
+			if (user == null
+					|| !user.getPassword().equals(PwdUtils.eccrypt(password))) {
 				throw new WebApplicationException(401);
 			}
 		} catch (NoSuchAlgorithmException e) {
@@ -94,5 +97,11 @@ public class UserServiceImpl implements UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<User> all() {
 		return systemDatastore.find(User.class).asList();
+	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void save(User user) {
+		systemDatastore.save(user);
 	}
 }
