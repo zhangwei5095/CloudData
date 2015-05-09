@@ -5,7 +5,7 @@ import java.util.List;
 public class TreeEntity<T> {
 	private String id;
 	private String pid;
-	private List<TreeEntity<T>> childs;
+	private List<TreeEntity<T>> children;
 
 	public TreeEntity() {
 	}
@@ -32,11 +32,12 @@ public class TreeEntity<T> {
 		this.pid = pid;
 	}
 
-	public List<TreeEntity<T>> getChilds() {
-		return childs;
+	public List<TreeEntity<T>> getChildren() {
+		return children;
 	}
 
-	public void setChilds(List<TreeEntity<T>> childs) {
-		this.childs = childs;
+	public void setChildren(List<TreeEntity<T>> children) {
+		this.children = children;
 	}
+
 }

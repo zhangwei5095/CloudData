@@ -1,28 +1,38 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('OrgCtrl', function($scope, $rootScope, $routeParams, $timeout, Restangular) {
-		$scope.users = [];
+	.controller('OrgCtrl', function($scope, $rootScope, $routeParams, $timeout,$location,Restangular) {
+		$scope.orgs = [];
+		$scope.neworg={};
 		$scope.myTreeHandler = function(branch) {
-			$scope.output = 'You selected: ' + branch.id;
-			Restangular.all("user/filterByOrg/"+ branch.id).getList().then(function(users) {
-				$scope.users = Restangular.stripRestangular(users);
-			});
+			$scope.neworg.pid=branch.id;
+			$scope.neworg.pname=branch.label;
 		};
 
 		$scope.myTreeData = [];
-		Restangular.all("org").getList().then(function(orgs) {
+		Restangular.all("org/listTree").getList().then(function(orgs) {
 			$scope.myTreeData = Restangular.stripRestangular(orgs);
+			
+		});
+		Restangular.all("org").getList().then(function(orgs) {
+			$scope.orgs = Restangular.stripRestangular(orgs);
 		});
 
+		$scope.save =function(){
+			delete $scope.neworg.pname;
+			Restangular.all("org").post($scope.neworg).then(function(response) {
+    			$location.path('org');
+  			});
+		};
+		
 		$scope.gridOptions = {
-			data: 'users',
+			data: 'orgs',
 			columnDefs: [{
-				field: 'name',
-				displayName: '用户名'
+				field: 'id',
+				displayName: 'ID'
 			}, {
-				field: 'roles',
-				displayName: '角色'
+				field: 'label',
+				displayName: '机构名'
 			}]
 		};
 	});

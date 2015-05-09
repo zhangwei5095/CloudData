@@ -40,7 +40,7 @@ public class TreeBuilder<T> {
 			for (TreeEntity<T> child : children) {
 				buildChildTreeEntitys(child);
 			}
-			treeEntity.setChilds(children);
+			treeEntity.setChildren(children);
 		}
 	}
 

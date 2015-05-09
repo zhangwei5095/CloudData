@@ -10,25 +10,17 @@ import com.tutu.clouddata.dto.tree.TreeEntity;
 @Entity("org")
 public class Org extends TreeEntity<Org> {
 	private String parentIds;
-	private List<String> children;
-	@JsonProperty("label")
+	private List<String> childs;
 	private String name;
 	
 	public String getName() {
 		return name;
 	}
-
+	@JsonProperty("label")
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public List<String> getChildren() {
-		return children;
-	}
-
-	public void setChildren(List<String> children) {
-		this.children = children;
-	}
 
 	public String getParentIds() {
 		return parentIds;
@@ -36,6 +28,14 @@ public class Org extends TreeEntity<Org> {
 
 	public void setParentIds(String parentIds) {
 		this.parentIds = parentIds;
+	}
+
+	public List<String> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(List<String> childs) {
+		this.childs = childs;
 	}
 
 }

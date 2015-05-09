@@ -6,6 +6,6 @@ import com.tutu.clouddata.dto.Org;
 
 public interface OrgService {
 	public List<Org> list();
-	
-	public void addOrg(String name,String parentId);
+	public List<Org> listTree();
+	public void addOrg(Org org);
 }

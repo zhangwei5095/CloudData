@@ -1,12 +1,59 @@
-
-
-<div id="content" class="row">
-        <div id="left" class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle">组织机构<i class="icon-refresh pull-right" onclick="refreshTree();"></i></a>
-            </div>
-            <abn-tree tree-data="myTreeData" tree-control="myTree" on-select="myTreeHandler(branch)"
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">            
+            <div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <span ng-if="doingAsync">...loading...</span>
+                        <abn-tree tree-data="myTreeData" tree-control="myTree" on-select="myTreeHandler(branch)"
                                   expand-level="2" initial-selection="Granny Smith"></abn-tree>
+                    </div>
+                    <div class="col-md-6">
+                    	<div>机构列表<div class="pull-right"><a class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#modal_dialog">新增</a></div></div>
+                        <div class="table"  ui-grid="gridOptions">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="openClose" class="icon-close">&nbsp;</div>
     </div>
+</div>
+<div class="modal fade" id="modal_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="myModalLabel">新增机构</h4>
+      </div>
+      <div class="modal-body" id="modal_dialog_content">
+        <form id="editFieldForm" class="form-horizontal" role="form">
+           <div class="form-group">
+            <label for="pname" class="col-sm-2 control-label">上级机构</label>
+
+            <div class="col-sm-10">
+              <input ng-model="neworg.pname" type="text" class="form-control" id="pname" readonly="true">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="id" class="col-sm-2 control-label">机构号</label>
+
+            <div class="col-sm-10">
+              <input ng-model="neworg.id" type="text" class="form-control" id="id">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="label" class="col-sm-2 control-label">机构名称</label>
+
+            <div class="col-sm-10">
+              <input  ng-model="neworg.label" type="text" class="form-control" id="label">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="modal_btn_ok" type="button" class="btn btn-primary" data-dismiss="modal"  ng-click="save()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>

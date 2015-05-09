@@ -3,24 +3,28 @@
 angular.module('clouddataFrontendApp')
 	.controller('UserCtrl', function($scope, $rootScope, $routeParams, $timeout, Restangular) {
 		$scope.users = [];
+		$scope.myTreeHandler = function(branch) {
+			$scope.output = 'You selected: ' + branch.id;
+			Restangular.all("user/filterByOrg/"+ branch.id).getList().then(function(users) {
+				$scope.users = Restangular.stripRestangular(users);
+			});
+		};
+
+		$scope.myTreeData = [];
+		Restangular.all("org/listTree").getList().then(function(orgs) {
+			$scope.myTreeData = Restangular.stripRestangular(orgs);
+		});
+
 		$scope.gridOptions = {
-			data: 'userData',
+			data: 'users',
 			columnDefs: [{
 				field: 'name',
 				displayName: '用户名'
-			}, {
-				field: 'orgId',
-				displayName: '机构号'
 			}, {
 				field: 'roles',
 				displayName: '角色'
 			}]
 		};
-
-		$scope.userData = [];
-		Restangular.all("user/all").getList().then(function(users) {
-			$scope.userData = Restangular.stripRestangular(users);
-		});
 
 		
 	});

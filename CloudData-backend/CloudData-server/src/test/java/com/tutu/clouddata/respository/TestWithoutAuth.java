@@ -25,7 +25,7 @@ public class TestWithoutAuth {
 	public Datastore ds;
 	@Before
 	public void initDs() throws UnknownHostException{
-		Mongo mongo=new Mongo("10.255.242.25",27017);
+		Mongo mongo=new Mongo("localhost",27017);
 		ds=new Morphia().createDatastore(mongo, "sysmongo");
 	}
 	
@@ -85,10 +85,16 @@ public class TestWithoutAuth {
 		org1.setParentIds("1");
 		children.add("2");
 		
-		org.setChildren(children);
+		Org org2=new Org();
+		org2.setName("子公司");
+		org2.setId("3");
+		org2.setPid("2");
+		org2.setParentIds("1,2");
+		
 		
 		ds.save(org);
 		ds.save(org1);
+		ds.save(org2);
 	}
 	@Test
 	public void createUser(){
