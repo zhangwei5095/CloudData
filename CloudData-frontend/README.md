@@ -3,7 +3,7 @@
 ---
 
 ## 运行 
-	
+	npm install & bower install
 	grunt serve --force
 
 ## 功能
