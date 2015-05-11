@@ -10,7 +10,7 @@ import org.mongodb.morphia.annotations.Id;
  * 
  * @Title MT.java
  * @Package com.passionguy.force.dto
- * @Description 
+ * @Description
  * @author tutu
  * @date 2014-11-20
  */
@@ -20,6 +20,13 @@ public class MT {
 	private String id;
 	private String name;
 	private List<MF> mfs;
+
+	public MT() {
+	}
+
+	public MT(String id) {
+		this.id = id;
+	}
 
 	public String getId() {
 		return id;
@@ -44,5 +51,5 @@ public class MT {
 	public void setMfs(List<MF> mfs) {
 		this.mfs = mfs;
 	}
-	
+
 }

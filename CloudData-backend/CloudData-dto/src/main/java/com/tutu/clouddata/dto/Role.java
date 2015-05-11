@@ -9,6 +9,10 @@ public class Role {
 	@JsonProperty("label")
 	private String name;
 
+	public Role(String id) {
+		this.id = id;
+	}
+
 	public String getId() {
 		return id;
 	}
