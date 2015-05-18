@@ -2,7 +2,6 @@ package com.tutu.clouddata.dto;
 
 
 public class RoleMT {
-	private String roleId;
 	private String mtId;
 	private Boolean c;
 
@@ -43,14 +42,6 @@ public class RoleMT {
 
 	public void setD(Boolean d) {
 		this.d = d;
-	}
-
-	public String getRoleId() {
-		return roleId;
-	}
-
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
 	}
 
 	public String getMtId() {

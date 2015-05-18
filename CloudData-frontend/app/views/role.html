@@ -1,59 +1,83 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
-            
+
             <div>
                 <div class="row">
                     <div class="col-md-6">
+                        <div>角色列表<div class="pull-right"><a class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#modal_role">新增</a></div></div>
                         <abn-tree tree-data="roleData" tree-control="myTree" on-select="myTreeHandler(branch)"
-                                  expand-level="2" initial-selection="Granny Smith"></abn-tree>
+                        expand-level="2" initial-selection="Granny Smith"></abn-tree>
                     </div>
                     <div class="col-md-6">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>对象</th>
-                        <th>创建</th>
-                        <th>读取</th>
-                        <th>更新</th>
-                        <th>删除</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="mt in mts">
-                        <td>{{mt.name}}</td>
-                        <td><input
-                            type="checkbox"
-                            name="selectedMts[]"
-                            ng-checked="checked(mt.id+'_r')"
-                            ng-click="toggleSelection(mt.id+'_r')"
-                            ></td>
-                        <td><input
-                            type="checkbox"
-                            name="selectedMts[]"
-                            ng-checked="checked(mt.id+'_c')"
-                            ng-click="toggleSelection(mt.id+'_c')"
-                            ></td>
-                        <td><input
-                            type="checkbox"
-                            name="selectedMts[]"
-                            value="{{mt.id}}"
-                            ng-checked="checked(mt.id+'_u')"
-                            ng-click="toggleSelection(mt.id+'_u')"
-                            ></td>
-                        <td><input
-                            type="checkbox"
-                            name="selectedMts[]"
-                            value="{{mt.id}}"
-                            ng-checked="checked(mt.id+'_d')"
-                            ng-click="toggleSelection(mt.id+'_d')"
-                            ></td>
-                    </tr>
-                </tbody>
-            </table>
+                        <div>对象权限列表</div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>对象</th>
+                                    <th>创建</th>
+                                    <th>读取</th>
+                                    <th>更新</th>
+                                    <th>删除</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="mt in mts">
+                                    <td>{{mt.name}}</td>
+                                    <td><input
+                                        type="checkbox"
+                                        ng-checked="roleMTMapping[mt.id].r"
+                                        ng-click="toggleSelection(mt.id+'_r')"
+                                        ></td>
+                                        <td><input
+                                            type="checkbox"
+                                            ng-checked="roleMTMapping[mt.id].c"
+                                            ng-click="toggleSelection(mt.id+'_c')"
+                                            ></td>
+                                            <td><input
+                                                type="checkbox"
+                                                ng-checked="roleMTMapping[mt.id].u"
+                                                ng-click="toggleSelection(mt.id+'_u')"
+                                                ></td>
+                                                <td><input
+                                                    type="checkbox"
+                                                    ng-checked="roleMTMapping[mt.id].d"
+                                                    ng-click="toggleSelection(mt.id+'_d')"
+                                                    ></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div><button type="submit"
+                                    class="btn btn-primary also" ng-click="save()">
+                                    保存
+                                </button></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="modal fade" id="modal_role" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+style="display: none;">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">新增角色</h4>
+        </div>
+        <div class="modal-body" id="modal_dialog_content">
+            <form id="editFieldForm" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="label" class="col-sm-2 control-label">角色名称</label>
+
+                    <div class="col-sm-10">
+                        <input ng-model="newrole.label" type="text" class="form-control" id="label">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="modal_btn_ok" type="button" class="btn btn-primary" data-dismiss="modal"  ng-click="saveRole()">保存</button>
         </div>
     </div>
 </div>

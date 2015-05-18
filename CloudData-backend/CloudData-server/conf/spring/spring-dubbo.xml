@@ -19,8 +19,6 @@
 	<!-- 声明需要暴露的服务接口 -->
 	<dubbo:service interface="com.tutu.clouddata.api.UserService"
 		ref="userService" protocol="dubbo,rest" />
-	<dubbo:service interface="com.tutu.clouddata.api.NewsEntryService"
-		ref="newsEntryService" protocol="dubbo,rest" />
 	<dubbo:service interface="com.tutu.clouddata.api.MMService"
 		ref="mmService" protocol="dubbo,rest" />
 	<dubbo:service interface="com.tutu.clouddata.api.MTService"

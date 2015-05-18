@@ -1,14 +1,20 @@
 package com.tutu.clouddata.dto;
 
+import java.io.Serializable;
+
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
-public class Role {
+@Entity("role")
+public class Role implements Serializable{
+	private static final long serialVersionUID = 1969508514906808445L;
 	@Id
 	private String id;
-	@JsonProperty("label")
 	private String name;
-
+	public Role(){
+		
+	}
 	public Role(String id) {
 		this.id = id;
 	}
@@ -25,6 +31,7 @@ public class Role {
 		return name;
 	}
 
+	@JsonProperty("label")
 	public void setName(String name) {
 		this.name = name;
 	}

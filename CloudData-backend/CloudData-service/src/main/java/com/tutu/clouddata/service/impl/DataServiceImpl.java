@@ -80,6 +80,7 @@ public class DataServiceImpl implements DataService {
 		return getData(mid, 1, 10);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getData(String collectionName, int page, int pagesize) {
 		List<Map<String,Object>> data = new ArrayList<>();
 		int skip = (page - 1) * pagesize;

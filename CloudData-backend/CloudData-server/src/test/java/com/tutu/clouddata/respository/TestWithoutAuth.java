@@ -13,6 +13,7 @@ import com.mongodb.Mongo;
 import com.tutu.clouddata.dto.Org;
 import com.tutu.clouddata.dto.Role;
 import com.tutu.clouddata.dto.RoleMT;
+import com.tutu.clouddata.dto.RoleMTS;
 import com.tutu.clouddata.dto.auth.User;
 import com.tutu.clouddata.model.MF;
 import com.tutu.clouddata.model.MFCheckBox;
@@ -27,7 +28,7 @@ public class TestWithoutAuth {
 
 	@Before
 	public void initDs() throws UnknownHostException {
-		Mongo mongo = new Mongo("localhost", 27017);
+		Mongo mongo = new Mongo("10.255.242.25", 27017);
 		ds = new Morphia().createDatastore(mongo, "sysmongo");
 	}
 
@@ -123,12 +124,15 @@ public class TestWithoutAuth {
 
 	@Test
 	public void createRoleMT() {
+		RoleMTS roleMts=new RoleMTS();
+		roleMts.setRoleId("1");
 		RoleMT roleMT = new RoleMT();
-		roleMT.setRoleId("1");
 		roleMT.setMtId("554d8e06fba4cfc7defb895b");
 		roleMT.setC(true);
 		roleMT.setR(true);
 		roleMT.setU(true);
+		List<RoleMT> rolemts=new ArrayList<RoleMT>();
+		roleMts.setRoleMTs(rolemts);
 		ds.save(roleMT);
 	}
 }

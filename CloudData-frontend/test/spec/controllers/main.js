@@ -3,7 +3,7 @@
 describe('Controller: MainCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('cloudErpFrontendApp'));
+  beforeEach(module('clouddataFrontendApp'));
 
   var MainCtrl,
     scope;

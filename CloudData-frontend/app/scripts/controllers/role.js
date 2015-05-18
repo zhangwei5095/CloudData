@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('RoleCtrl', function($scope, $rootScope, $routeParams, $timeout, Restangular) {
+	.controller('RoleCtrl', function($scope, $rootScope, $routeParams, $timeout,$location, Restangular) {
+		$scope.roleId={};
+		$scope.newrole={};
 		$scope.roleMTs = [];
+		$scope.postRoleMTs = [];
 		$scope.roleData = [];
 		$scope.gridOptions = {
 			data: 'roleResource',
@@ -18,9 +21,15 @@ angular.module('clouddataFrontendApp')
 			}]
 		};
 		$scope.myTreeHandler = function(branch) {
-			$scope.role.id=branch.id;
+			$scope.roleId=branch.id;
 			Restangular.all("role/mt?roleId="+branch.id).getList().then(function(roleMTs) {
 				$scope.roleMTs = Restangular.stripRestangular(roleMTs);
+				$scope.roleMTMapping=[];
+				if ($scope.roleMTs) {
+                	for (var i = 0; i < $scope.roleMTs.length; i++) {
+                    	$scope.roleMTMapping[$scope.roleMTs[i].mtId] = $scope.roleMTs[i];
+                	};
+            	}
 			});
 		};
 		Restangular.all("role").getList().then(function(roles) {
@@ -28,20 +37,7 @@ angular.module('clouddataFrontendApp')
 			});
 		
 		$scope.roleMTMapping = {};
-		$scope.checked = function(mtcrud) {
-            if ($scope.roleMTs) {
-                for (var i = 0; i < $scope.roleMTs.length; i++) {
-                    $scope.roleMTMapping[$scope.roleMTs[i].mtId] = $scope.roleMTs[i];
-                };
-            }
-            var mtcrudarray = mtcrud.split("_");
-            if ($scope.roleMTMapping[mtcrudarray[0]]) {
-                return ($scope.roleMTMapping[mtcrudarray[0]].c && "c" === mtcrudarray[1]) ||
-                    ($scope.roleMTMapping[mtcrudarray[0]].r && "r" === mtcrudarray[1]) ||
-                    ($scope.roleMTMapping[mtcrudarray[0]].u && "u" === mtcrudarray[1]) ||
-                    ($scope.roleMTMapping[mtcrudarray[0]].d && "d" === mtcrudarray[1]);
-            }
-        };
+	
 		$scope.toggleSelection = function toggleSelection(mtcrud) {
             var mtcrudarray = mtcrud.split("_");
 
@@ -53,10 +49,32 @@ angular.module('clouddataFrontendApp')
                 }
             } else {
                 $scope.roleMTMapping[mtcrudarray[0]]={};
-                $scope.roleMTMapping[mtcrudarray[0]].mt={};
-                $scope.roleMTMapping[mtcrudarray[0]].mt.id=mtcrudarray[0];
                 $scope.roleMTMapping[mtcrudarray[0]][mtcrudarray[1]] = true;
             }
 
         };
+        $scope.saveRole=function(){
+        	Restangular.all("role").post($scope.newrole).then(function(response) {
+    			$location.path('role');
+  			});
+        }
+        $scope.save=function(){
+        	var i=0;
+        	var roleMTS={roleId:$scope.roleId,roleMTs:[]};
+        	var postRoleMTs = [];
+        	for(var key in $scope.roleMTMapping){
+        		var roleMT=$scope.roleMTMapping[key];
+        		postRoleMTs[i]={};
+        		postRoleMTs[i].mtId=key;
+        		postRoleMTs[i].c=roleMT.c;
+        		postRoleMTs[i].r=roleMT.r;
+        		postRoleMTs[i].u=roleMT.u;
+        		postRoleMTs[i].d=roleMT.d;
+        		i++;
+        	}
+        	roleMTS.roleMTs=postRoleMTs;
+        	Restangular.all("role/mt").post(roleMTS).then(function(response) {
+    			$location.path('role');
+  			});
+        }
 	});
