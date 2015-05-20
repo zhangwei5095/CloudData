@@ -1,6 +1,7 @@
 package com.tutu.clouddata.service.impl;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import com.tutu.clouddata.auth.dao.SystemDatastore;
 import com.tutu.clouddata.context.ContextHolder;
 import com.tutu.clouddata.dto.TokenTransfer;
 import com.tutu.clouddata.dto.UserTransfer;
+import com.tutu.clouddata.dto.auth.AccessToken;
 import com.tutu.clouddata.dto.auth.User;
 import com.tutu.clouddata.session.PwdUtils;
 import com.tutu.clouddata.session.TokenUtils;
@@ -62,19 +64,25 @@ public class UserServiceImpl implements UserService {
 	@Path("authenticate")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public TokenTransfer authenticate(@FormParam("username") String username,
-			@FormParam("password") String password) {
+	public TokenTransfer authenticate(@FormParam("username") String username, @FormParam("password") String password) {
 
 		User user = systemDatastore.get(User.class, username);
+		String token = null;
 		try {
-			if (user == null
-					|| !user.getPassword().equals(PwdUtils.eccrypt(password))) {
+			if (user == null || !user.getPassword().equals(PwdUtils.eccrypt(password))) {
 				throw new WebApplicationException(401);
+			} else {
+				token = TokenUtils.createToken(user);
+				AccessToken accessToken = new AccessToken();
+				accessToken.setToken(token);
+				accessToken.setTokenDate(new Date());
+				accessToken.setUserId(user.getName());
+				systemDatastore.save(accessToken);
 			}
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("some thing wrong", e);
 		}
-		return new TokenTransfer(TokenUtils.createToken(user));
+		return new TokenTransfer(token);
 	}
 
 	private Map<String, Boolean> createRoleMap(User user) {
@@ -102,6 +110,11 @@ public class UserServiceImpl implements UserService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void save(User user) {
+		try {
+			user.setPassword(PwdUtils.eccrypt(user.getPassword()));
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 		systemDatastore.save(user);
 	}
 }

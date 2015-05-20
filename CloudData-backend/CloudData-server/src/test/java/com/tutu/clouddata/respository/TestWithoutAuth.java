@@ -14,6 +14,8 @@ import com.tutu.clouddata.dto.Org;
 import com.tutu.clouddata.dto.Role;
 import com.tutu.clouddata.dto.RoleMT;
 import com.tutu.clouddata.dto.RoleMTS;
+import com.tutu.clouddata.dto.auth.MM;
+import com.tutu.clouddata.dto.auth.Tenant;
 import com.tutu.clouddata.dto.auth.User;
 import com.tutu.clouddata.model.MF;
 import com.tutu.clouddata.model.MFCheckBox;
@@ -135,4 +137,17 @@ public class TestWithoutAuth {
 		roleMts.setRoleMTs(rolemts);
 		ds.save(roleMT);
 	}
+	
+	@Test
+	public void createMMAndTenant() {
+		MM mm=new MM();
+		mm.setHostip("10.255.242.25");
+		mm.setPort(27017);
+		ds.save(mm);
+		Tenant tenant=new Tenant();
+		tenant.setMm(mm);
+		tenant.setName("测试公司");
+		ds.save(tenant);
+	}
+	
 }

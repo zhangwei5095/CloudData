@@ -22,4 +22,8 @@ public class PwdUtils {
         }
         return sb.toString();
     }
+	
+	public static void main(String[] args) throws NoSuchAlgorithmException {
+		System.out.println(PwdUtils.eccrypt("000000"));
+	}
 }

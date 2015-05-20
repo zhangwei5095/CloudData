@@ -34,10 +34,7 @@ public class MTServiceImpl extends BasicService implements MTService {
 		return getDataStore().find(MT.class).asList();
 	}
 
-	@GET
-	@Path("{mid}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public MT mt(@PathParam("mid") String mid) {
+	public MT mt( String mid) {
 		return getDataStore().get(MT.class, new ObjectId(mid));
 	}
 	

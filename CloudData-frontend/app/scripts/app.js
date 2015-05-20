@@ -26,11 +26,11 @@ angular
     'ngGrid',
     'ui.grid',
     'ui.grid.pagination',
-    'angularBootstrapNavTree'
-  ])
-  .config(function ($routeProvider) {
+    'angularBootstrapNavTree',
+    'http-auth-interceptor'
+  ]).config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
+      .when('/main', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
@@ -78,9 +78,15 @@ angular
         templateUrl: 'views/mt.html',
         controller: 'MtCtrl'
       })
+      .when('/login',{
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
+      
+      
   }).config(function(formlyConfigProvider) {
   var templates = '/views/fields/';
   var formly = templates + 'formly-field-';
@@ -111,4 +117,45 @@ angular
   timepickerConfig.showSeconds=true;
 }).config(function(RestangularProvider) {
   RestangularProvider.setBaseUrl('http://localhost:8080/rest/');
+}).config(function($httpProvider){
+      /* Register error provider that shows message on failed requests or redirects to login page on
+       * unauthenticated requests */
+        $httpProvider.interceptors.push(function ($q, $rootScope, $location) {
+              return {
+                'responseError': function(rejection) {
+                  var status = rejection.status;
+                  var config = rejection.config;
+                  var method = config.method;
+                  var url = config.url;
+            
+                  if (status == 401) {
+                    $location.path( "/login" );
+                  } else {
+                    $rootScope.error = method + " on " + url + " failed with status " + status;
+                  }
+                    
+                  return $q.reject(rejection);
+                }
+              };
+          }
+        );
+        
+        /* Registers auth token interceptor, auth token is either passed by header or by query parameter
+         * as soon as there is an authenticated user */
+        $httpProvider.interceptors.push(function ($q, $rootScope, $location) {
+            return {
+              'request': function(config) {
+                var isRestCall = config.url.indexOf('rest') > 0;
+                if(!isRestCall&& !$rootScope.isLoggedin){
+                   $location.path( "/login" );
+                }
+                if (isRestCall && $rootScope.isLoggedin) {
+                  var authToken = $rootScope.authToken;
+                  config.headers['X-Auth-Token'] = authToken;
+                }
+                return config || $q.when(config);
+              }
+            };
+        }
+      );
 });

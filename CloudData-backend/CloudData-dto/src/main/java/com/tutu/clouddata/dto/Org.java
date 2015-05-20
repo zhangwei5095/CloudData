@@ -12,7 +12,7 @@ public class Org extends TreeEntity<Org> {
 	private String parentIds;
 	private List<String> childs;
 	private String name;
-	
+	private String tenantId;
 	public String getName() {
 		return name;
 	}
@@ -36,6 +36,12 @@ public class Org extends TreeEntity<Org> {
 
 	public void setChilds(List<String> childs) {
 		this.childs = childs;
+	}
+	public String getTenantId() {
+		return tenantId;
+	}
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 
 }
