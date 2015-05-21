@@ -1,6 +1,8 @@
 package com.tutu.clouddata.dto;
 
+import org.mongodb.morphia.annotations.Entity;
 
+@Entity("role_mt")
 public class RoleMT {
 	private String mtId;
 	private Boolean c;
@@ -10,7 +12,6 @@ public class RoleMT {
 	private Boolean u;
 
 	private Boolean d;
-
 
 	public Boolean getC() {
 		return c;

@@ -18,8 +18,8 @@ public class AuthFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		ContextHolder.setContext(new Context());
-		ContextHolder.getContext().setDatastore(systemDatastore);
+//		ContextHolder.setContext(new Context());
+//		ContextHolder.getContext().setDatastore(systemDatastore);
 		String authToken = requestContext.getHeaderString("X-Auth-Token");
 		if (!requestContext.getUriInfo().getPath().endsWith("authenticate")) {
 			boolean paas = false;
@@ -33,8 +33,7 @@ public class AuthFilter implements ContainerRequestFilter {
 				}
 			}
 			if (!paas) {
-				requestContext.abortWith(Response.status(HttpServletResponse.SC_UNAUTHORIZED)
-						.entity("Unauthorized: Authentication token was either missing or invalid.").build());
+				requestContext.abortWith(Response.status(HttpServletResponse.SC_UNAUTHORIZED).build());
 			}
 		}
 	}

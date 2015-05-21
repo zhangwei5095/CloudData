@@ -1,6 +1,7 @@
 package com.tutu.clouddata.respository;
 
 import java.net.UnknownHostException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +25,14 @@ import com.tutu.clouddata.model.MFNumber;
 import com.tutu.clouddata.model.MFSelect;
 import com.tutu.clouddata.model.MFText;
 import com.tutu.clouddata.model.MT;
+import com.tutu.clouddata.session.PwdUtils;
 
 public class TestWithoutAuth {
 	public Datastore ds;
 
 	@Before
 	public void initDs() throws UnknownHostException {
-		Mongo mongo = new Mongo("10.255.242.25", 27017);
+		Mongo mongo = new Mongo("localhost", 27017);
 		ds = new Morphia().createDatastore(mongo, "sysmongo");
 	}
 
@@ -102,9 +104,10 @@ public class TestWithoutAuth {
 	}
 
 	@Test
-	public void createUser() {
+	public void createUser() throws NoSuchAlgorithmException {
 		User user = new User();
-		user.setName("测试用户");
+		user.setName("admin");
+		user.setPassword(PwdUtils.eccrypt("000000"));
 		user.setOrgId("1");
 		ds.save(user);
 	}
@@ -129,7 +132,7 @@ public class TestWithoutAuth {
 		RoleMTS roleMts=new RoleMTS();
 		roleMts.setRoleId("1");
 		RoleMT roleMT = new RoleMT();
-		roleMT.setMtId("554d8e06fba4cfc7defb895b");
+		roleMT.setMtId("555d558f620907f52734a6b4");
 		roleMT.setC(true);
 		roleMT.setR(true);
 		roleMT.setU(true);
@@ -139,7 +142,7 @@ public class TestWithoutAuth {
 	}
 	
 	@Test
-	public void createMMAndTenant() {
+	public void createMMAndTenant() throws NoSuchAlgorithmException {
 		MM mm=new MM();
 		mm.setHostip("10.255.242.25");
 		mm.setPort(27017);
@@ -147,7 +150,14 @@ public class TestWithoutAuth {
 		Tenant tenant=new Tenant();
 		tenant.setMm(mm);
 		tenant.setName("测试公司");
+		tenant.setDbname("c_1");
 		ds.save(tenant);
+		User user = new User();
+		user.setName("admin");
+		user.setPassword(PwdUtils.eccrypt("000000"));
+		user.setTenant(tenant);
+		user.setOrgId("1");
+		ds.save(user);
 	}
 	
 }

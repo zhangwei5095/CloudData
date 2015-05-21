@@ -3,12 +3,12 @@
 angular.module('clouddataFrontendApp')
 	.controller('UserCtrl', function($scope, $rootScope, $routeParams, $timeout, Restangular) {
 		$scope.users = [];
-		$scope.newuser={};
-		$scope.roles=[];
+		$scope.newuser = {};
+		$scope.roles = [];
 		$scope.myTreeHandler = function(branch) {
-			$scope.newuser.orgId=branch.id;
-			$scope.newuser.orgName=branch.label;
-			Restangular.all("user/filterByOrg/"+ branch.id).getList().then(function(users) {
+			$scope.newuser.orgId = branch.id;
+			$scope.newuser.orgName = branch.label;
+			Restangular.all("user/filterByOrg/" + branch.id).getList().then(function(users) {
 				$scope.users = Restangular.stripRestangular(users);
 			});
 		};
@@ -19,13 +19,13 @@ angular.module('clouddataFrontendApp')
 		Restangular.all("org/listTree").getList().then(function(orgs) {
 			$scope.myTreeData = Restangular.stripRestangular(orgs);
 		});
-		
 
-		$scope.save=function(){
+
+		$scope.save = function() {
 			delete $scope.newuser.orgName;
 			Restangular.all("user").post($scope.newuser).then(function(response) {
-    			$location.path('user');
-  			});
+				$location.path('user');
+			});
 		}
 		$scope.gridOptions = {
 			data: 'users',
@@ -38,5 +38,5 @@ angular.module('clouddataFrontendApp')
 			}]
 		};
 
-		
+
 	});
