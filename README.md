@@ -13,4 +13,5 @@ CloudData
   
   如果你觉得你的web设计才是最好的，那么，期待你的建议。
   
-  
+##架构图
+   ![image](https://github.com/passionguy/CloudData/blob/master/CloudData-backend/CloudData.jpg)
