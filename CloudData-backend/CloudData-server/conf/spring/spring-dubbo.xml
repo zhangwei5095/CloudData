@@ -15,7 +15,7 @@
 		contextpath="rest"/> -->
 	<dubbo:protocol name="rest" port="8080" threads="500"
 		extension="com.tutu.clouddata.session.AuthFilter,com.tutu.clouddata.session.CORSFilter"
-		contextpath="rest" />
+		contextpath="rest" server="tomcat"/>
 	<!-- 声明需要暴露的服务接口 -->
 	<dubbo:service interface="com.tutu.clouddata.api.UserService"
 		ref="userService" protocol="dubbo,rest" />
