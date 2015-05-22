@@ -6,12 +6,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.springframework.beans.BeanUtils;
@@ -35,7 +33,7 @@ public class MTServiceImpl extends BasicService implements MTService {
 	}
 
 	public MT mt( String mid) {
-		return getDataStore().get(MT.class, new ObjectId(mid));
+		return getDataStore().find(MT.class).field("id").equal(mid).get();
 	}
 	
 	@POST
