@@ -16,7 +16,7 @@
     "angular-ui-select": "~0.11.2",
     "restangular": "~1.5.1",
     "angular-bootstrap-nav-tree": "*",
-    "angular-ui-grid": "~3.0.0-rc.20",
+    "angular-ui-grid": "~3.0.0-rc.21",
     "angular-http-auth": "~1.2.2"
   },
   "devDependencies": {
