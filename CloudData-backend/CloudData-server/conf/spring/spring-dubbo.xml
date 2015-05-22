@@ -11,8 +11,6 @@
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.url}" />
 	<!-- 暴露用dubbo协议服务端口号 -->
 	<dubbo:protocol name="dubbo" port="${dubbo.port}" />
-	<!-- <dubbo:protocol name="rest" port="8080" threads="500" extension="com.tutu.clouddata.session.CORSFilter" 
-		contextpath="rest"/> -->
 	<dubbo:protocol name="rest" port="8080" threads="500"
 		extension="com.tutu.clouddata.session.AuthFilter,com.tutu.clouddata.session.CORSFilter"
 		contextpath="rest" server="tomcat"/>

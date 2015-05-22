@@ -1,4 +1,4 @@
-package com.tutu.clouddata.respository;
+package com.tutu.clouddata;
 
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
@@ -13,8 +13,6 @@ import org.mongodb.morphia.Morphia;
 import com.mongodb.Mongo;
 import com.tutu.clouddata.dto.Org;
 import com.tutu.clouddata.dto.Role;
-import com.tutu.clouddata.dto.RoleMT;
-import com.tutu.clouddata.dto.RoleMTS;
 import com.tutu.clouddata.dto.auth.MM;
 import com.tutu.clouddata.dto.auth.Tenant;
 import com.tutu.clouddata.dto.auth.User;
@@ -27,13 +25,15 @@ import com.tutu.clouddata.model.MFText;
 import com.tutu.clouddata.model.MT;
 import com.tutu.clouddata.session.PwdUtils;
 
-public class TestWithoutAuth {
+public class TestInitData {
+	public Datastore sysDs;
 	public Datastore ds;
-
+	public Mongo mongo;
 	@Before
 	public void initDs() throws UnknownHostException {
-		Mongo mongo = new Mongo("localhost", 27017);
-		ds = new Morphia().createDatastore(mongo, "sysmongo");
+		mongo = new Mongo("localhost", 27017);
+		sysDs = new Morphia().createDatastore(mongo, "sysmongo");
+		ds = new Morphia().createDatastore(mongo, "c_1");
 	}
 
 	@Test
@@ -104,15 +104,6 @@ public class TestWithoutAuth {
 	}
 
 	@Test
-	public void createUser() throws NoSuchAlgorithmException {
-		User user = new User();
-		user.setName("admin");
-		user.setPassword(PwdUtils.eccrypt("000000"));
-		user.setOrgId("1");
-		ds.save(user);
-	}
-
-	@Test
 	public void createRole() {
 		Role role = new Role("1");
 		role.setName("测试用户");
@@ -126,37 +117,25 @@ public class TestWithoutAuth {
 		ds.save(role2);
 		ds.save(role3);
 	}
-
-	@Test
-	public void createRoleMT() {
-		RoleMTS roleMts=new RoleMTS();
-		roleMts.setRoleId("1");
-		RoleMT roleMT = new RoleMT();
-		roleMT.setMtId("555d558f620907f52734a6b4");
-		roleMT.setC(true);
-		roleMT.setR(true);
-		roleMT.setU(true);
-		List<RoleMT> rolemts=new ArrayList<RoleMT>();
-		roleMts.setRoleMTs(rolemts);
-		ds.save(roleMT);
-	}
 	
 	@Test
 	public void createMMAndTenant() throws NoSuchAlgorithmException {
 		MM mm=new MM();
-		mm.setHostip("10.255.242.25");
+		mm.setHostip("localhost");
 		mm.setPort(27017);
-		ds.save(mm);
+		sysDs.save(mm);
 		Tenant tenant=new Tenant();
 		tenant.setMm(mm);
 		tenant.setName("测试公司");
 		tenant.setDbname("c_1");
-		ds.save(tenant);
+		sysDs.save(tenant);
 		User user = new User();
 		user.setName("admin");
 		user.setPassword(PwdUtils.eccrypt("000000"));
 		user.setTenant(tenant);
 		user.setOrgId("1");
+		sysDs.save(user);
+		user.setTenant(null);
 		ds.save(user);
 	}
 	
