@@ -32,24 +32,25 @@ public class MTServiceImpl extends BasicService implements MTService {
 		return getDataStore().find(MT.class).asList();
 	}
 
-	public MT mt( String mid) {
+	public MT mt(String mid) {
 		return getDataStore().find(MT.class).field("id").equal(mid).get();
 	}
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void save(MT mt) {
 		getDataStore().save(mt);
 	}
-	
+
 	@Path("mf")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addMf(MFJsonViews mf,@QueryParam("mtid") String mtid) {
-		MF rmf=new MFText();
+	public void addMf(MFJsonViews mf, @QueryParam("mtid") String mtid) {
+		MF rmf = new MFText();
 		BeanUtils.copyProperties(mf, rmf);
 		UpdateOperations<MT> ops;
-		Query<MT> updateQuery = getDataStore().createQuery(MT.class).field("_id").equal(mtid);
+		Query<MT> updateQuery = getDataStore().createQuery(MT.class)
+				.field("_id").equal(mtid);
 		ops = getDataStore().createUpdateOperations(MT.class).add("mfs", rmf);
 		getDataStore().update(updateQuery, ops);
 	}

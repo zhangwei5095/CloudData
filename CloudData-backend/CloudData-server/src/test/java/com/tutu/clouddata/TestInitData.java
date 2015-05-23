@@ -39,6 +39,7 @@ public class TestInitData {
 	@Test
 	public void createMT() throws UnknownHostException {
 		MT mt = new MT();
+		mt.setId("customer");
 		mt.setName("客户");
 		List<MF> mfs = new ArrayList<MF>();
 
