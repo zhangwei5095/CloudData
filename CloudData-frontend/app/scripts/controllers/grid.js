@@ -37,7 +37,7 @@ angular.module('clouddataFrontendApp')
 				var data;
 				if (searchText) {
 					var ft = searchText.toLowerCase();
-					Restangular.all('data/r').getList({
+					Restangular.all('data/rg').getList({
 						mid: $routeParams.mid,
 						page: page,
 						pagesize: pageSize
@@ -46,7 +46,7 @@ angular.module('clouddataFrontendApp')
 						$scope.setPagingData($scope.realData, page, pageSize);
 					});
 				} else {
-					Restangular.all('data/r').getList({
+					Restangular.all('data/rg').getList({
 						mid: $routeParams.mid,
 						page: page,
 						pagesize: pageSize

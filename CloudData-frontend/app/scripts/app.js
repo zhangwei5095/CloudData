@@ -23,7 +23,10 @@ angular
     'ui.grid',
     'ui.grid.pagination',
     'angularBootstrapNavTree',
-    'http-auth-interceptor'
+    'http-auth-interceptor',
+    'datatables',
+    'datatables.bootstrap',
+    'datatables.tabletools'
   ]).config(function($routeProvider) {
     $routeProvider
       .when('/main', {
@@ -77,6 +80,10 @@ angular
       .when('/login', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
+      })
+      .when('/query', {
+        templateUrl: 'views/query.html',
+        controller: 'QueryCtrl'
       })
       .otherwise({
         redirectTo: '/'
