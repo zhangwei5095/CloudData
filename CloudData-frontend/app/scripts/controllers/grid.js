@@ -12,14 +12,14 @@ angular.module('clouddataFrontendApp')
 
 		$scope.filterOptions = {
 			filterText: "",
-			useExternalFilter: true
+			useExternalFilter: false
 		};
 		$scope.totalServerItems = 100;
 
 		$scope.pagingOptions = {
-			paginationPageSizes: [2, 4, 6],
-			paginationPageSize: 4,
-			totalServerItems: 6,
+			paginationPageSizes: [10, 20, 50,100],
+			paginationPageSize: 10,
+			totalServerItems: 10,
 			paginationCurrentPage: 1
 		};
 
@@ -58,7 +58,7 @@ angular.module('clouddataFrontendApp')
 			}, 100);
 		};
 
-		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+		$scope.getPagedDataAsync($scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage,'');
 
 		$scope.$watch('pagingOptions', function(newVal, oldVal) {
 			if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
@@ -67,7 +67,7 @@ angular.module('clouddataFrontendApp')
 		}, true);
 		$scope.$watch('filterOptions', function(newVal, oldVal) {
 			if (newVal !== oldVal) {
-				$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+				$scope.getPagedDataAsync($scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage, $scope.filterOptions.filterText);
 			}
 		}, true);
 
@@ -75,9 +75,9 @@ angular.module('clouddataFrontendApp')
 			data: 'realData',
 			columnDefs: [],
 			enablePagination: true,
-			paginationPageSizes: [2, 4, 6],
-			paginationPageSize: 4,
-			totalServerItems: 6,
+			paginationPageSizes: [10, 20, 50,100],
+			paginationPageSize: 10,
+			totalServerItems: 10,
 			paginationCurrentPage: 1
 		};
 		angular.forEach($scope.mfs, function(mf) {

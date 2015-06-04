@@ -80,7 +80,7 @@ public class DataServiceImpl implements DataService {
 	public List<Map<String,Object>> readNgGrid(@QueryParam("mid") String mid,
 			@QueryParam("page") Integer page,
 			@QueryParam("pagesize") Integer pagesize) {
-		return getData(mid, 1, 10);
+		return getData(mid, page, pagesize);
 	}
 	
 	@GET
