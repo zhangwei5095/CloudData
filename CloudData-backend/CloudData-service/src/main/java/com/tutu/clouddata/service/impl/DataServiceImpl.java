@@ -2,8 +2,10 @@ package com.tutu.clouddata.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +32,7 @@ import com.mongodb.DBObject;
 import com.tutu.clouddata.api.DataService;
 import com.tutu.clouddata.api.MTService;
 import com.tutu.clouddata.context.ContextHolder;
+import com.tutu.clouddata.dto.datatable.DataTableDTO;
 import com.tutu.clouddata.model.MF;
 import com.tutu.clouddata.model.MT;
 
@@ -72,12 +75,43 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@GET
-	@Path("/r")
+	@Path("/rg")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Map<String,Object>> read(@QueryParam("mid") String mid,
+	public List<Map<String,Object>> readNgGrid(@QueryParam("mid") String mid,
 			@QueryParam("page") Integer page,
 			@QueryParam("pagesize") Integer pagesize) {
 		return getData(mid, 1, 10);
+	}
+	
+	@GET
+	@Path("/r")
+	@Produces(MediaType.APPLICATION_JSON)
+	public DataTableDTO readDataTable(@QueryParam("mid") String mid,
+			@QueryParam("page") Integer page,
+			@QueryParam("pagesize") Integer pagesize) {
+		return getDataTableData(mid, 1, 10);
+	}
+	
+	private DataTableDTO getDataTableData(String collectionName, int page, int pagesize) {
+		DataTableDTO dataTableDTO=new DataTableDTO();
+		List<Map<String,String>> data=new ArrayList<Map<String,String>>();
+		Map<String,String> rowData;
+		int skip = (page - 1) * pagesize;
+		dataTableDTO.setRecordsTotal(getCollection(collectionName).count());
+		DBCursor dbCursor = getCollection(collectionName).find().sort(null)
+				.skip(skip).limit(pagesize);
+		Set<String> keys;
+		while (dbCursor.hasNext()) {
+			rowData=new HashMap<String,String>();
+			DBObject dbObject = dbCursor.next();
+			keys=dbObject.keySet();
+			for(String key:keys){
+				rowData.put(key, String.valueOf(dbObject.get(key)));
+			}
+			data.add(rowData);
+		}
+		dataTableDTO.setData(data);
+		return dataTableDTO;
 	}
 
 	@SuppressWarnings("unchecked")
