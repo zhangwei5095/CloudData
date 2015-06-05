@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.tutu.clouddata.api.MTService;
+import com.tutu.clouddata.dto.View;
 import com.tutu.clouddata.model.MF;
 import com.tutu.clouddata.model.MFJsonViews;
 import com.tutu.clouddata.model.MFText;
@@ -49,10 +50,18 @@ public class MTServiceImpl extends BasicService implements MTService {
 		MF rmf = new MFText();
 		BeanUtils.copyProperties(mf, rmf);
 		UpdateOperations<MT> ops;
-		Query<MT> updateQuery = getDataStore().createQuery(MT.class)
-				.field("_id").equal(mtid);
+		Query<MT> updateQuery = getDataStore().createQuery(MT.class).field("_id").equal(mtid);
 		ops = getDataStore().createUpdateOperations(MT.class).add("mfs", rmf);
 		getDataStore().update(updateQuery, ops);
 	}
 
+	@Path("view")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void addView(View view, @QueryParam("mtid") String mtid) {
+		UpdateOperations<MT> ops;
+		Query<MT> updateQuery = getDataStore().createQuery(MT.class).field("_id").equal(mtid);
+		ops = getDataStore().createUpdateOperations(MT.class).add("views", view);
+		getDataStore().update(updateQuery, ops);
+	}
 }

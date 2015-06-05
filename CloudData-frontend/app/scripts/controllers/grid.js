@@ -4,10 +4,10 @@ angular.module('clouddataFrontendApp')
 	.controller('DataCtrl', function($scope, $rootScope, $routeParams, $http, Restangular) {
 		$scope.realData = [];
 		$scope.mid = $routeParams.mid;
-		
+		$rootScope.mid = $routeParams.mid;
 		angular.forEach($rootScope.mts, function(mt) {
 			if (mt.id === $routeParams.mid)
-				$scope.mfs = mt.mfs;
+				$rootScope.mfs = mt.mfs;
 		});
 
 		$scope.filterOptions = {
@@ -80,7 +80,7 @@ angular.module('clouddataFrontendApp')
 			totalServerItems: 10,
 			paginationCurrentPage: 1
 		};
-		angular.forEach($scope.mfs, function(mf) {
+		angular.forEach($rootScope.mfs, function(mf) {
 			var columnDef = {
 				field: mf.key,
 				displayName: mf.label

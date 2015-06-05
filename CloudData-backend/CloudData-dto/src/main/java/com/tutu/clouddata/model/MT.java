@@ -5,6 +5,8 @@ import java.util.List;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
+import com.tutu.clouddata.dto.View;
+
 /**
  * 元数据表
  * 
@@ -20,7 +22,7 @@ public class MT {
 	private String id;
 	private String name;
 	private List<MF> mfs;
-
+	private List<View> views;
 	public MT() {
 	}
 
@@ -50,6 +52,14 @@ public class MT {
 
 	public void setMfs(List<MF> mfs) {
 		this.mfs = mfs;
+	}
+
+	public List<View> getViews() {
+		return views;
+	}
+
+	public void setViews(List<View> views) {
+		this.views = views;
 	}
 
 }

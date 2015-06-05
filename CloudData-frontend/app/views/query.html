@@ -1,1 +1,24 @@
-<div id="builder-basic" class="query-builder form-inline"></div>
+<div class="panel panel-default">
+  <div class="panel-heading panel-primary">规则定义</div>
+  <form id="interceptRuleForm" class="form-horizontal" role="form">
+    <div class="form-group">
+      <label for="rule_name" class="col-sm-4 control-label">规则名称</label>
+
+      <div class="col-sm-6">
+        <input ng-model="rule.ruleName" type="text" ng-required="true" class="form-control" id="rule_name">
+      </div>
+    </div>
+  </form>
+  <div class="hr hr-16 hr-dotted">查询条件</div>
+  <div id="builder"></div>
+  <div class="btn-group">
+    <button class="btn btn-warning reset">重设</button>
+    <button class="btn btn-success save-rule">保存规则</button>
+  </div>
+  <div class="hr hr-16 hr-dotted">显示列</div>
+  <div>
+    <select multiple="multiple" name="displayColumn">
+    </select>
+  </div>
+  
+</div>

@@ -19,7 +19,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // bower:js
-      'bower_components/jquery/dist/jquery.js',
+      'bower_components/jquery/jquery.js',
       'bower_components/angular/angular.js',
       'bower_components/bootstrap/dist/js/bootstrap.js',
       'bower_components/angular-animate/angular-animate.js',
@@ -49,6 +49,7 @@ module.exports = function(config) {
       'bower_components/momentjs/moment.js',
       'bower_components/jquery-extendext/jQuery.extendext.js',
       'bower_components/jQuery-QueryBuilder/dist/js/query-builder.js',
+      'bower_components/bootstrap-duallistbox/src/jquery.bootstrap-duallistbox.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
