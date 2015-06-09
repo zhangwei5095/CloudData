@@ -14,5 +14,7 @@ public interface DataService {
 
 	List<Map<String, Object>> readNgGrid(String collectionName, Integer page, Integer pageSize);
 
+	List<Map<String, Object>> readDataByVid(String collectionName, String vid, Integer page, Integer pageSize);
+
 	DataTableDTO readDataTable(String collectionName, Integer page, Integer pageSize);
 }

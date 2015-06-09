@@ -29,25 +29,22 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.QueryBuilder;
 import com.tutu.clouddata.api.DataService;
 import com.tutu.clouddata.api.MTService;
 import com.tutu.clouddata.context.ContextHolder;
+import com.tutu.clouddata.dto.View;
 import com.tutu.clouddata.dto.datatable.DataTableDTO;
 import com.tutu.clouddata.model.MF;
 import com.tutu.clouddata.model.MT;
+import com.tutu.clouddata.service.BasicService;
 
 @Service("dataService")
 @Path("/data")
-public class DataServiceImpl implements DataService {
-	private static Logger logger = LoggerFactory
-			.getLogger(DataServiceImpl.class);
+public class DataServiceImpl extends BasicService implements DataService {
+	private static Logger logger = LoggerFactory.getLogger(DataServiceImpl.class);
 	@Resource
 	private MTService mtService;
-
-	private DBCollection getCollection(String collectionName) {
-		return ContextHolder.getContext().getDatastore().getDB()
-				.getCollection(collectionName);
-	}
 
 	@Override
 	public void delete(String tid, String id) {
@@ -59,8 +56,7 @@ public class DataServiceImpl implements DataService {
 	@POST
 	@Path("/c")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void create(@QueryParam("mid") String mid,
-			@Context HttpServletRequest request) {
+	public void create(@QueryParam("mid") String mid, @Context HttpServletRequest request) {
 		Map<String, String> postData = null;
 		try {
 			postData = JSON.parse(request.getReader(), Map.class);
@@ -77,35 +73,32 @@ public class DataServiceImpl implements DataService {
 	@GET
 	@Path("/rg")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Map<String,Object>> readNgGrid(@QueryParam("mid") String mid,
-			@QueryParam("page") Integer page,
+	public List<Map<String, Object>> readNgGrid(@QueryParam("mid") String mid, @QueryParam("page") Integer page,
 			@QueryParam("pagesize") Integer pagesize) {
 		return getData(mid, page, pagesize);
 	}
-	
+
 	@GET
 	@Path("/r")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DataTableDTO readDataTable(@QueryParam("mid") String mid,
-			@QueryParam("page") Integer page,
+	public DataTableDTO readDataTable(@QueryParam("mid") String mid, @QueryParam("page") Integer page,
 			@QueryParam("pagesize") Integer pagesize) {
 		return getDataTableData(mid, 1, 10);
 	}
-	
+
 	private DataTableDTO getDataTableData(String collectionName, int page, int pagesize) {
-		DataTableDTO dataTableDTO=new DataTableDTO();
-		List<Map<String,String>> data=new ArrayList<Map<String,String>>();
-		Map<String,String> rowData;
+		DataTableDTO dataTableDTO = new DataTableDTO();
+		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+		Map<String, String> rowData;
 		int skip = (page - 1) * pagesize;
 		dataTableDTO.setRecordsTotal(getCollection(collectionName).count());
-		DBCursor dbCursor = getCollection(collectionName).find().sort(null)
-				.skip(skip).limit(pagesize);
+		DBCursor dbCursor = getCollection(collectionName).find().sort(null).skip(skip).limit(pagesize);
 		Set<String> keys;
 		while (dbCursor.hasNext()) {
-			rowData=new HashMap<String,String>();
+			rowData = new HashMap<String, String>();
 			DBObject dbObject = dbCursor.next();
-			keys=dbObject.keySet();
-			for(String key:keys){
+			keys = dbObject.keySet();
+			for (String key : keys) {
 				rowData.put(key, String.valueOf(dbObject.get(key)));
 			}
 			data.add(rowData);
@@ -115,15 +108,14 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String,Object>> getData(String collectionName, int page, int pagesize) {
-		List<Map<String,Object>> data = new ArrayList<>();
+	public List<Map<String, Object>> getData(String collectionName, int page, int pagesize) {
+		List<Map<String, Object>> data = new ArrayList<>();
 		int skip = (page - 1) * pagesize;
-		DBCursor dbCursor = getCollection(collectionName).find().sort(null)
-				.skip(skip).limit(pagesize);
+		DBCursor dbCursor = getCollection(collectionName).find().sort(null).skip(skip).limit(pagesize);
 		while (dbCursor.hasNext()) {
 			DBObject dbObject = dbCursor.next();
 			dbObject.put("_id", dbObject.get("_id").toString());
-			
+
 			data.add(dbObject.toMap());
 		}
 		logger.debug(data.toString());
@@ -138,4 +130,36 @@ public class DataServiceImpl implements DataService {
 		}
 		getCollection(mt.getId()).save(dbObject);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> readDataByVid(String collectionName, String vid, Integer page, Integer pageSize) {
+		List<Map<String, Object>> data = new ArrayList<>();
+		View view = getView(collectionName, vid);
+		int skip = (page - 1) * pageSize;
+		String[] childUserIds = getChildUserIds();
+		DBObject query = null;
+		try {
+			query = (DBObject) JSON.parse(view.getMongoScript());
+			query.putAll(QueryBuilder.start("create_by").in(childUserIds).get());
+		} catch (ParseException e) {
+			logger.error("视图定义的script有错误", e);
+		}
+		DBCursor cursor = getCollection(collectionName).find(query).skip(skip).limit(pageSize);
+		while (cursor.hasNext()) {
+			DBObject dbObject = cursor.next();
+			data.add(dbObject.toMap());
+		}
+		return data;
+	}
+
+	private View getView(String collectionName, String vid) {
+		MT mt = getDataStore().find(MT.class).field("_id").equal(collectionName).get();
+		for (View view : mt.getViews()) {
+			if (vid.equals(view.getId().toString()))
+				return view;
+		}
+		return null;
+	}
+
 }
