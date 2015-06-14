@@ -8,7 +8,7 @@
  * Controller of the clouddataFrontendApp
  */
 angular.module('clouddataFrontendApp')
-	.controller('MainCtrl', function($scope, $window, $rootScope, Restangular, $location) {
+	.controller('MainCtrl', function($scope, $window, $rootScope,Meta, Restangular, $location) {
 		$scope.menus = [];
 		$rootScope.mts = [];
 		if ($window.sessionStorage.getItem('token') == undefined) {
@@ -16,8 +16,8 @@ angular.module('clouddataFrontendApp')
 			return;
 		} else {
 			Restangular.all('mt').getList().then(function(mts) {
-				$rootScope.mts = Restangular.stripRestangular(mts);
-				angular.forEach($rootScope.mts, function(mt) {
+				Meta.loadMTS(Restangular.stripRestangular(mts));
+				angular.forEach(Meta.getMTS(), function(mt) {
 					var menu = {
 						name: mt.name,
 						href: 'data/' + mt.id

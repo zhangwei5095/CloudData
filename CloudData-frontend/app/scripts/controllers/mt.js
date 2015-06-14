@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('MtCtrl', function($scope, $rootScope, $routeParams, $timeout, $location, Restangular) {
+	.controller('MtCtrl', function($scope, $rootScope,Meta, $routeParams, $timeout, $location, Restangular) {
 		$scope.fields = [];
 		$scope.mtData = [];
 		$scope.newmt = {};
 		$scope.newmf = {};
-		angular.forEach($rootScope.mts, function(mt) {
+		angular.forEach(Meta.getMTS(), function(mt) {
 			var mt = {
 				id: mt.id,
 				label: mt.name
@@ -15,12 +15,7 @@ angular.module('clouddataFrontendApp')
 		});
 		$scope.myTreeHandler = function(branch) {
 			$scope.mtid = branch.id;
-			angular.forEach($rootScope.mts, function(mt) {
-				if (mt.id === branch.id) {
-					$scope.fields = mt.mfs;
-					return;
-				}
-			});
+			$scope.fields=Meta.getMFSByMid(branch.id);
 		};
 		$scope.saveMt = function() {
 			Restangular.all('mt').post($scope.newmt).then(function(response) {

@@ -1,16 +1,15 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('DataCtrl', function($scope, $rootScope, $routeParams, $http, Restangular) {
+	.controller('DataCtrl', function($scope, $rootScope, $routeParams,Meta, $http, Restangular) {
 		$scope.realData = [];
 		$scope.mid = $routeParams.mid;
 		$rootScope.mid = $routeParams.mid;
-		angular.forEach($rootScope.mts, function(mt) {
-			if (mt.id === $routeParams.mid){
-				$rootScope.mfs = mt.mfs;
-				$rootScope.views=mt.views;
-			}
-		});
+
+		Meta.selectMid($routeParams.mid);
+		$rootScope.mfs=Meta.getMFS();
+		$rootScope.views=Meta.getViews();
+		
 
 		$scope.filterOptions = {
 			filterText: "",
@@ -62,7 +61,7 @@ angular.module('clouddataFrontendApp')
 			}, 100);
 		};
 
-		$scope.getPagedDataAsync($scope.mid,"all",$scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage,'');
+		//$scope.getPagedDataAsync($scope.mid,"all",$scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage,'');
 
 		$scope.$watch('pagingOptions', function(newVal, oldVal) {
 			if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
@@ -84,7 +83,7 @@ angular.module('clouddataFrontendApp')
 			totalServerItems: 10,
 			paginationCurrentPage: 1
 		};
-		angular.forEach($rootScope.mfs, function(mf) {
+		angular.forEach(Meta.getMFS(), function(mf) {
 			var columnDef = {
 				field: mf.key,
 				displayName: mf.label
