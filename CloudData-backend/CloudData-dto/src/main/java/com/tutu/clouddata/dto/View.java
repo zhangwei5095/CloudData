@@ -1,22 +1,13 @@
 package com.tutu.clouddata.dto;
 
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Id;
 
 
-public class View {
-	@Id
-	private ObjectId id;
+public class View extends BaseEntity{
 	private String viewName;
 	private String rules;
 	private String mongoScript;
 	private String displayColumn;
-	public ObjectId getId() {
-		return id;
-	}
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
+	
 	public String getViewName() {
 		return viewName;
 	}

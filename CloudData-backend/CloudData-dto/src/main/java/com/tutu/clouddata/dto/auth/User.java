@@ -65,4 +65,8 @@ public class User{
 		this.orgId = orgId;
 	}
 	
+	public boolean equals(User user) {
+		return this.name.equals(user.getName());
+	}
+	
 }

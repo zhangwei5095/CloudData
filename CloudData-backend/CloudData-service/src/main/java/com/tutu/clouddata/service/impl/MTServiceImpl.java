@@ -1,5 +1,7 @@
 package com.tutu.clouddata.service.impl;
 
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -17,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.tutu.clouddata.api.MTService;
+import com.tutu.clouddata.context.ContextHolder;
 import com.tutu.clouddata.dto.View;
 import com.tutu.clouddata.model.MF;
 import com.tutu.clouddata.model.MFJsonViews;
@@ -31,7 +34,16 @@ public class MTServiceImpl extends BasicService implements MTService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<MT> list() {
-		return getDataStore().find(MT.class).asList();
+		List<MT> mts=getDataStore().find(MT.class).asList();
+		for(MT mt:mts){
+			List<View> views=mt.getViews();
+			for(Iterator<View> iter=views.iterator();iter.hasNext();){
+				View view=iter.next();
+				if(!view.getCreator().equals(ContextHolder.getContext().getUser()))
+					iter.remove();
+			}
+		}
+		return mts;
 	}
 
 	public MT mt(String mid) {
@@ -60,7 +72,9 @@ public class MTServiceImpl extends BasicService implements MTService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addView(View view, @QueryParam("mtid") String mtid) {
-		view.setId(new ObjectId());
+		view.setId(new ObjectId().toString());
+		view.setCreateDate(new Date());
+		view.setCreator(ContextHolder.getContext().getUser());
 		UpdateOperations<MT> ops;
 		Query<MT> updateQuery = getDataStore().createQuery(MT.class).field("_id").equal(mtid);
 		ops = getDataStore().createUpdateOperations(MT.class).add("views", view);

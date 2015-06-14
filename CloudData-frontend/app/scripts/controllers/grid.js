@@ -6,8 +6,10 @@ angular.module('clouddataFrontendApp')
 		$scope.mid = $routeParams.mid;
 		$rootScope.mid = $routeParams.mid;
 		angular.forEach($rootScope.mts, function(mt) {
-			if (mt.id === $routeParams.mid)
+			if (mt.id === $routeParams.mid){
 				$rootScope.mfs = mt.mfs;
+				$rootScope.views=mt.views;
+			}
 		});
 
 		$scope.filterOptions = {
@@ -32,13 +34,14 @@ angular.module('clouddataFrontendApp')
 			}
 		};
 
-		$scope.getPagedDataAsync = function(pageSize, page, searchText) {
+		$scope.getPagedDataAsync = function(mid,vid,pageSize, page, searchText) {
 			setTimeout(function() {
 				var data;
 				if (searchText) {
 					var ft = searchText.toLowerCase();
-					Restangular.all('data/rg').getList({
-						mid: $routeParams.mid,
+					Restangular.all('data/rv').getList({
+						mid: mid,
+						vid:vid,
 						page: page,
 						pagesize: pageSize
 					}).then(function(queryData) {
@@ -46,8 +49,9 @@ angular.module('clouddataFrontendApp')
 						$scope.setPagingData($scope.realData, page, pageSize);
 					});
 				} else {
-					Restangular.all('data/rg').getList({
-						mid: $routeParams.mid,
+					Restangular.all('data/rv').getList({
+						mid: mid,
+						vid:vid,
 						page: page,
 						pagesize: pageSize
 					}).then(function(queryData) {
@@ -58,7 +62,7 @@ angular.module('clouddataFrontendApp')
 			}, 100);
 		};
 
-		$scope.getPagedDataAsync($scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage,'');
+		$scope.getPagedDataAsync($scope.mid,"all",$scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage,'');
 
 		$scope.$watch('pagingOptions', function(newVal, oldVal) {
 			if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
@@ -87,4 +91,8 @@ angular.module('clouddataFrontendApp')
 			};
 			$scope.gridOptions.columnDefs.push(columnDef);
 		});
+
+		$scope.update=function(){
+   			$scope.getPagedDataAsync($scope.mid,$scope.selectedItem.id,$scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage,'');
+		}
 	});

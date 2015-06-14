@@ -3,9 +3,11 @@ package com.tutu.clouddata.dto;
 import java.util.Date;
 
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.PostPersist;
+import org.mongodb.morphia.annotations.PrePersist;
+import org.mongodb.morphia.annotations.PreSave;
 import org.mongodb.morphia.annotations.Reference;
 
+import com.tutu.clouddata.context.ContextHolder;
 import com.tutu.clouddata.dto.auth.User;
 
 public class BaseEntity {
@@ -19,13 +21,13 @@ public class BaseEntity {
 	private User lastModifier;
 	private Boolean delFlag;
 
-//	@PrePersist
-//	void prePersist() {
-//		lastUpdated = new Date();
-//		lastModifier = ContextHolder.getContext().getUser();
-//	}
+	@PrePersist
+	void prePersist() {
+		lastUpdated = new Date();
+		lastModifier = ContextHolder.getContext().getUser();
+	}
 
-	@PostPersist
+	@PreSave
 	void preSave() {
 		createDate = lastUpdated;
 		creator = lastModifier;
