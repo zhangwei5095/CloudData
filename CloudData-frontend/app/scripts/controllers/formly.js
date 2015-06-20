@@ -8,11 +8,11 @@
  * Controller of the clouddataFrontendApp
  */
 angular.module('clouddataFrontendApp')
-  .controller('FormlyCtrl', function($scope,$rootScope,$routeParams,$location,Restangular) {
+  .controller('FormlyCtrl', function($scope,$rootScope,$state,$stateParams,$location,Restangular) {
     $scope.formData = {};
 
     angular.forEach($rootScope.mts,function(mt){
-      if(mt.id===$routeParams.mid)
+      if(mt.id===$stateParams.mid)
         $scope.mfs=mt.mfs;
     });
     
@@ -122,8 +122,8 @@ angular.module('clouddataFrontendApp')
     $scope.onSubmit = function() {
       $scope.submittedData = $scope.formData;
       console.log($scope.submittedData);
-      Restangular.all('data/c').post($scope.submittedData,{mid:$routeParams.mid}).then(function(response){
-        $location.path('data/'+$routeParams.mid);
+      Restangular.all('data/c').post($scope.submittedData,{mid:$stateParams.mid}).then(function(response){
+        $state.go('app.data', { mid: $stateParams.mid });
       });
     }
   });

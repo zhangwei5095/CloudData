@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-    .controller('RoleCtrl', function($scope, $rootScope, $routeParams, $timeout, $location, Restangular) {
+    .controller('RoleCtrl', function($scope, $rootScope,$state,Meta, $timeout, $location, Restangular) {
+        $scope.mts=Meta.getMTS();
         $scope.roleId = {};
         $scope.newrole = {};
         $scope.roleMTs = [];
@@ -77,7 +78,7 @@ angular.module('clouddataFrontendApp')
             }
             roleMTS.roleMTs = postRoleMTs;
             Restangular.all("role/mt").post(roleMTS).then(function(response) {
-                $location.path('role');
+                $state.go("app.role");
             });
         }
     });

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('OrgCtrl', function($scope, $rootScope, $routeParams, $timeout, $location, Restangular) {
+	.controller('OrgCtrl', function($scope, $rootScope, $timeout, $location, Restangular) {
 		$scope.orgs = [];
 		$scope.neworg = {};
 		$scope.myTreeHandler = function(branch) {

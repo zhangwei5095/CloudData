@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('QueryCtrl', function($scope, $rootScope, $routeParams, $http, Restangular) {
+	.controller('QueryCtrl', function($scope, $rootScope, $http, Restangular) {
 		var dc_options = '';
 		var qb_filters = [];
 		angular.forEach($rootScope.mfs, function(mf) {

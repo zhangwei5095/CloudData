@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserService {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public TokenTransfer authenticate(@FormParam("username") String username, @FormParam("password") String password) {
-
 		User user = systemDatastore.get(User.class, username);
 		String token = null;
 		try {
@@ -82,7 +81,10 @@ public class UserServiceImpl implements UserService {
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("some thing wrong", e);
 		}
-		return new TokenTransfer(token);
+		TokenTransfer tokenTransfer=new TokenTransfer(token);
+		tokenTransfer.setRoles(user.getRoles().toArray(new String[user.getRoles().size()]));
+		tokenTransfer.setName(user.getName());
+		return tokenTransfer;
 	}
 
 	private Map<String, Boolean> createRoleMap(User user) {

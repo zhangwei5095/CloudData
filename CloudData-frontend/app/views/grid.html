@@ -1,5 +1,5 @@
 <section class="content-header"><select ng-options="view as view.viewName for view in views" ng-model="selectedItem" ng-change="update()" >
-</select> <a ng-href="/#/query" class="btn btn-default">新建查询</a><a ng-href="/#/formly/{{mid}}" class="btn btn-default">新建</a></section>
+</select> <a ui-sref="app.query" class="btn btn-default">新建查询</a><a ui-sref="app.formly({mid:mid})" class="btn btn-default">新建</a></section>
 
 <div style="width: 600px; height: 300px;"   ui-grid="gridOptions" ui-grid-pagination="pagingOptions">
 </div>

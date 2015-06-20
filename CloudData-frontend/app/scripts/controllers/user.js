@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('UserCtrl', function($scope, $rootScope, $routeParams, $timeout, Restangular) {
+	.controller('UserCtrl', function($scope, $rootScope, $timeout, Restangular) {
 		$scope.users = [];
 		$scope.newuser = {};
 		$scope.roles = [];

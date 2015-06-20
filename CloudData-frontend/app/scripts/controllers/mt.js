@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('MtCtrl', function($scope, $rootScope,Meta, $routeParams, $timeout, $location, Restangular) {
+	.controller('MtCtrl', function($scope, $rootScope,Meta, $timeout, $location, Restangular) {
 		$scope.fields = [];
 		$scope.mtData = [];
 		$scope.newmt = {};

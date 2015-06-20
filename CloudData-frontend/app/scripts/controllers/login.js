@@ -1,18 +1,24 @@
 	'use strict';
 
 	angular.module('clouddataFrontendApp')
-		.controller('LoginCtrl', function($scope, $window, $rootScope, $routeParams, $timeout, $location, Restangular, authService) {
-
-			$scope.login = function() {
-				Restangular.all("user/authenticate").withHttpConfig({
+	.controller('SigninCtrl', function($scope, $state, principal,Restangular) {
+      $scope.user={};
+      $scope.signin = function() {
+        Restangular.all("user/authenticate").withHttpConfig({
 					transformRequest: angular.identity
 				})
 					.customPOST("username=" + $scope.user.username + "&password=" + $scope.user.password, undefined, undefined, {
 						'Content-Type': "application/x-www-form-urlencoded"
-					}).then(function(response) {
-						authService.loginConfirmed();
-						$window.sessionStorage.setItem('token', response.token);
-						$location.path("main");
+					}).then(function(tokenTransfer) {
+						var tokenTransfer=Restangular.stripRestangular(tokenTransfer);
+						principal.authenticate({
+          					name: tokenTransfer.name,
+          					roles: tokenTransfer.roles
+        				});
+        				localStorage.setItem("clouddataFrontendApp.token",tokenTransfer.token);
+						if ($scope.returnToState) $state.go($scope.returnToState.name, $scope.returnToStateParams);
+        				else $state.go('app');	
 					});
-			}
-		});
+				};
+    });
+		

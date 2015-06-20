@@ -8,24 +8,22 @@
  * Controller of the clouddataFrontendApp
  */
 angular.module('clouddataFrontendApp')
-	.controller('MainCtrl', function($scope, $window, $rootScope,Meta, Restangular, $location) {
-		$scope.menus = [];
+.controller('MainCtrl',
+    function($scope,$rootScope, $state, principal,Meta, Restangular, $location) {
+      $scope.menus = [];
 		$rootScope.mts = [];
-		if ($window.sessionStorage.getItem('token') == undefined) {
-			$location.path("/login");
-			return;
-		} else {
+		
 			Restangular.all('mt').getList().then(function(mts) {
 				Meta.loadMTS(Restangular.stripRestangular(mts));
 				angular.forEach(Meta.getMTS(), function(mt) {
 					var menu = {
 						name: mt.name,
-						href: 'data/' + mt.id
+						href: mt.id
 					};
 					$scope.menus.push(menu);
 				});
 			});
-		}
+		
 		$scope.getClass = function(path) {
 			if ($location.path().substr(0, path.length) == path) {
 				return "active"
@@ -33,24 +31,8 @@ angular.module('clouddataFrontendApp')
 				return ""
 			}
 		}
-		/**
- 	$scope.menus = [{
- 		name: "Formly",
- 		href: "formly"
- 	}, {
- 		name: "SchemaForm",
- 		href: "schemaForm"
- 	}, {
- 		name: 'AutoField',
- 		href: "autoField"
- 	}, {
- 		name: 'react',
- 		href: 'react'
- 	}, {
- 		name: 'jsx',
- 		href: 'jsx'
- 	}, {
- 		name: 'grid',
- 		href: 'grid'
- 	}];**/
-	});
+      $scope.signout = function() {
+        principal.authenticate(null);
+        $state.go('signin');
+      };
+    });

@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('DataCtrl', function($scope, $rootScope, $routeParams,Meta, $http, Restangular) {
+	.controller('DataCtrl', function($scope, $rootScope, $stateParams,Meta, $http, Restangular) {
 		$scope.realData = [];
-		$scope.mid = $routeParams.mid;
-		$rootScope.mid = $routeParams.mid;
+		$scope.mid = $stateParams.mid;
+		$rootScope.mid = $stateParams.mid;
 
-		Meta.selectMid($routeParams.mid);
+		Meta.selectMid($stateParams.mid);
 		$rootScope.mfs=Meta.getMFS();
 		$rootScope.views=Meta.getViews();
 		
