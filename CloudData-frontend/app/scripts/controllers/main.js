@@ -10,6 +10,7 @@
 angular.module('clouddataFrontendApp')
 .controller('MainCtrl',
     function($scope,$rootScope, $state, principal,Meta, Restangular, $location) {
+      $scope.principal=principal;
       $scope.menus = [];
 		$rootScope.mts = [];
 		

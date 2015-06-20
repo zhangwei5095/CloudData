@@ -25,6 +25,10 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap','restangular
 
         return _identity.roles.indexOf(role) != -1;
       },
+      isAdmin:function(){
+        var myidentity = angular.fromJson(localStorage.getItem("clouddataFrontendApp.identity"));
+        return myidentity.roles.indexOf('admin')!=-1;
+      },
       isInAnyRole: function(roles) {
         if (!_authenticated || !_identity.roles) return false;
 
