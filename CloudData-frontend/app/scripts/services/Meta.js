@@ -36,12 +36,15 @@ angular.module('clouddataFrontendApp')
  		return this.getViewsByMid(mid);
  	}
 
- 	function getViewByVid(vid){
- 		var views=getViews();
- 		angular.forEach(views, function(view) {
- 			if(vid===view.id)
- 				return view;
+ 	metaService.getViewByMidVid = function(mid,vid){
+ 		var _view;
+ 		angular.forEach(this.getViewsByMid(mid), function(view) {
+ 			if(vid===view.id){
+ 				_view=view;
+ 				return _view;
+ 			}
  		})	
+ 		return _view;
  	}
 
  	function getMFByKey(key){

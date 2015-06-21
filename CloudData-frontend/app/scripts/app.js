@@ -242,7 +242,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap','restangular
         templateUrl: 'views/formly.html',
         controller: 'FormlyCtrl'
        }).state('app.query', {
-        url: '/query',
+        url: '/query/:mid/:vid',
         data: {
           roles: ['admin']
         },

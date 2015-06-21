@@ -92,6 +92,7 @@ angular.module('clouddataFrontendApp')
 		});
 
 		$scope.update=function(){
-   			$scope.getPagedDataAsync($scope.mid,$scope.selectedItem.id,$scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage,'');
+			$scope.vid=$scope.selectedItem.id;
+   			$scope.getPagedDataAsync($scope.mid,$scope.vid,$scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage,'');
 		}
 	});

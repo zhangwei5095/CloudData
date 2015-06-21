@@ -1,10 +1,22 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('QueryCtrl', function($scope, $rootScope, $http, Restangular) {
+	.controller('QueryCtrl', function($scope, $rootScope,$stateParams,Meta, $http, Restangular) {
 		var dc_options = '';
 		var qb_filters = [];
-		angular.forEach($rootScope.mfs, function(mf) {
+		var rules_basic = null;
+		var displayColumnArray=[];
+		$scope.rule={};
+		$scope.mid=$stateParams.mid;
+		$scope.vid=$stateParams.vid;
+		$scope.view=Meta.getViewByMidVid($scope.mid,$scope.vid);
+		if($scope.view){
+			$scope.rule.ruleName=$scope.view.viewName;
+			$scope.rule.displayColumn=$scope.view.displayColumn;
+			displayColumnArray=$scope.rule.displayColumn.split(",");
+			rules_basic=angular.fromJson($scope.view.rules);
+		}
+		angular.forEach(Meta.getMTByMid($scope.mid).mfs, function(mf) {
 			var filter = {
 				id: mf.key,
 				label: mf.label
@@ -31,9 +43,9 @@ angular.module('clouddataFrontendApp')
 				filter.type = 'string';
 			}
 			qb_filters.push(filter);
-			dc_options += '<option value="' + mf.key + '">' + mf.label + '</option>';
+			var isSelected=displayColumnArray.indexOf(mf.key)!=-1;
+			dc_options += '<option value="' + mf.key + '" '+ (isSelected?'selected="selected"':'') +'>' + mf.label + '</option>';
 		});
-		var rules_basic = null;
 
 		$('#builder').queryBuilder({
 			plugins: ['bt-tooltip-errors'],
@@ -54,8 +66,15 @@ angular.module('clouddataFrontendApp')
 				displayColumn:$('select[name="displayColumn"]').val().join(',')
 			};
 			Restangular.all('mt/view').post(view, {
-				mtid: $rootScope.mid
+				mtid: $scope.mid,
+				vid:$scope.vid
 			}).then(function(response) {
+
+			});
+		});
+
+		$('.delete').on('click', function() {
+			Restangular.one('mt/delete/mt',$scope.mid).one('view',$scope.vid).get().then(function(response) {
 
 			});
 		});

@@ -15,5 +15,7 @@ public interface MTService {
 
 	void addMf(MFJsonViews mf, String mtid);
 
-	void addView(View view, String mtid);
+	void saveView(View view, String mtid,String vid);
+	
+	void deleteView(String mtid,String vid);
 }
