@@ -39,7 +39,18 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" ng-show="newmf.type==='relation'">
+						<label for="relationObj" class="col-sm-2 control-label">相关项</label>
+
+						<div class="col-sm-10">
+							<select ng-model="newmf.relationObj" class="form-control" id="type">
+								<option ng-repeat="mt in mtData" value="{{mt.id}}">
+									{{mt.label}}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group" >
 						<label for="key" class="col-sm-2 control-label">字段KEY</label>
 
 						<div class="col-sm-10">
@@ -56,21 +67,21 @@
 					<div class="form-group">
 						<label for="required" class="col-sm-2 control-label">是否必填</label>
 
-						<div>
+						<div class="col-sm-2">
 							<input  ng-model="newmf.required" type="checkbox" class="form-control" id="required">
 						</div>
 					</div>
-					<div>
+					<div  class="form-group">
 						<label for="disabled" class="col-sm-2 control-label">是否可编辑</label>
 
-						<div>
+						<div class="col-sm-2">
 							<input  ng-model="newmf.disabled" type="checkbox" class="form-control" id="disabled">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="defaultValue" class="col-sm-2 control-label">默认值</label>
 
-						<div>
+						<div class="col-sm-2">
 							<input  ng-model="newmf.defaultValue" type="checkbox" class="form-control" id="defaultValue">
 						</div>
 					</div>

@@ -23,7 +23,7 @@ angular.module('clouddataFrontendApp')
 			});
 		};
 		$scope.saveMf = function() {
-			delete $scope.newmf.type;
+			//delete $scope.newmf.type;
 			Restangular.all('mt/mf').post($scope.newmf, {
 				mtid: $scope.mtid
 			}).then(function(response) {
@@ -54,6 +54,9 @@ angular.module('clouddataFrontendApp')
 		}, {
 			name: '复选框',
 			value: 'checkbox'
+		}, {
+			name: '关联对象',
+			value: 'relation'
 		}];
 		$scope.gridOptions = {
 			data: 'fields',

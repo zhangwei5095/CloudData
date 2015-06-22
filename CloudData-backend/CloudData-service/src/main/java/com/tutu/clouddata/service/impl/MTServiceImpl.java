@@ -25,8 +25,10 @@ import com.mongodb.BasicDBObject;
 import com.tutu.clouddata.api.MTService;
 import com.tutu.clouddata.context.ContextHolder;
 import com.tutu.clouddata.dto.View;
+import com.tutu.clouddata.model.FieldType;
 import com.tutu.clouddata.model.MF;
 import com.tutu.clouddata.model.MFJsonViews;
+import com.tutu.clouddata.model.MFRelation;
 import com.tutu.clouddata.model.MFText;
 import com.tutu.clouddata.model.MT;
 import com.tutu.clouddata.service.BasicService;
@@ -65,12 +67,36 @@ public class MTServiceImpl extends BasicService implements MTService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addMf(MFJsonViews mf, @QueryParam("mtid") String mtid) {
-		MF rmf = new MFText();
+		MF rmf = null;
+		switch (mf.getFieldType()) {
+		case TEXT:
+			rmf = new MFText();
+			break;
+		case RELATION:
+			rmf = new MFRelation();
+			break;
+		default:
+			break;
+		}
 		BeanUtils.copyProperties(mf, rmf);
+		if(mf.getFieldType().equals(FieldType.RELATION))
+			updateRelaionObj(mtid,mf.getRelationObj());
+		createMF(mtid, rmf);
+	}
+
+	private void createMF(String mid, MF mf) {
 		UpdateOperations<MT> ops;
 		Query<MT> updateQuery = getDataStore().createQuery(MT.class)
-				.field("_id").equal(mtid);
-		ops = getDataStore().createUpdateOperations(MT.class).add("mfs", rmf);
+				.field("_id").equal(mid);
+		ops = getDataStore().createUpdateOperations(MT.class).add("mfs", mf);
+		getDataStore().update(updateQuery, ops);
+	}
+
+	private void updateRelaionObj(String mid, String relationObj) {
+		Query<MT> updateQuery = getDataStore().createQuery(MT.class)
+				.field("_id").equal(relationObj);
+		UpdateOperations<MT> ops = getDataStore().createUpdateOperations(
+				MT.class).add("relationObjs", mid);
 		getDataStore().update(updateQuery, ops);
 	}
 
@@ -93,13 +119,15 @@ public class MTServiceImpl extends BasicService implements MTService {
 			view.setId(vid);
 			Query<MT> updateQuery = getDataStore().createQuery(MT.class)
 					.field("_id").equal(mtid);
-			UpdateOperations<MT> ops = getDataStore().createUpdateOperations(MT.class).removeAll("views", new BasicDBObject("_id", vid)); 
-			getDataStore().update(updateQuery,ops);
-			UpdateOperations<MT> ops2 = getDataStore().createUpdateOperations(MT.class).add("views", view); 
-			getDataStore().update(updateQuery,ops2);
+			UpdateOperations<MT> ops = getDataStore().createUpdateOperations(
+					MT.class).removeAll("views", new BasicDBObject("_id", vid));
+			getDataStore().update(updateQuery, ops);
+			UpdateOperations<MT> ops2 = getDataStore().createUpdateOperations(
+					MT.class).add("views", view);
+			getDataStore().update(updateQuery, ops2);
 		}
 	}
-	
+
 	@Path("delete/mt/{mtid}/view/{vid}")
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)

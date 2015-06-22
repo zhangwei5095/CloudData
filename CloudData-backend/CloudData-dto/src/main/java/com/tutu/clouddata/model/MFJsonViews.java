@@ -1,5 +1,8 @@
 package com.tutu.clouddata.model;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class MFJsonViews {
 	protected String key;
 	protected String label;
@@ -8,9 +11,9 @@ public class MFJsonViews {
 	protected String defaultValue;
 
 	protected String stringValue;
-	
+	private String type;
 	private FieldType fieldType;
-
+	private String relationObj;
 	public String getKey() {
 		return key;
 	}
@@ -58,12 +61,29 @@ public class MFJsonViews {
 	public void setStringValue(String stringValue) {
 		this.stringValue = stringValue;
 	}
-
+	
 	public FieldType getFieldType() {
 		return fieldType;
 	}
 
 	public void setFieldType(FieldType fieldType) {
 		this.fieldType = fieldType;
+	}
+
+	public String getRelationObj() {
+		return relationObj;
+	}
+
+	public void setRelationObj(String relationObj) {
+		this.relationObj = relationObj;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+		setFieldType(FieldType.fromType(type));
 	}
 }
