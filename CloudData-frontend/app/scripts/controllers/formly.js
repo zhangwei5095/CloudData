@@ -8,19 +8,23 @@
  * Controller of the clouddataFrontendApp
  */
 angular.module('clouddataFrontendApp')
-  .controller('FormlyCtrl', function($scope,$rootScope,$state,$stateParams,$location,Restangular) {
+  .controller('FormlyCtrl', function($scope, $rootScope, $state, $stateParams, $location, Restangular) {
+    $scope.mid = $stateParams.mid;
+    $scope.rid = $stateParams.rid;
     $scope.formData = {};
-
-    angular.forEach($rootScope.mts,function(mt){
-      if(mt.id===$stateParams.mid)
-        $scope.mfs=mt.mfs;
+    if ($scope.rid) {
+      $scope.formData=Restangular.stripRestangular(Restangular.one("data/r?mid=" + $scope.mid + "&rid=" + $scope.rid).get());
+    }
+    angular.forEach($rootScope.mts, function(mt) {
+      if (mt.id === $stateParams.mid)
+        $scope.mfs = mt.mfs;
     });
-    
-    $scope.formFields=$scope.mfs;
-    
-    
+
+    $scope.formFields = $scope.mfs;
+
+
     $scope.formFields2 = [{
-      id:null,
+      id: null,
       key: 'name',
       type: 'text',
       label: 'Name',
@@ -122,8 +126,12 @@ angular.module('clouddataFrontendApp')
     $scope.onSubmit = function() {
       $scope.submittedData = $scope.formData;
       console.log($scope.submittedData);
-      Restangular.all('data/c').post($scope.submittedData,{mid:$stateParams.mid}).then(function(response){
-        $state.go('app.data', { mid: $stateParams.mid });
+      Restangular.all('data/c').post($scope.submittedData, {
+        mid: $stateParams.mid
+      }).then(function(response) {
+        $state.go('app.data', {
+          mid: $stateParams.mid
+        });
       });
     }
   });

@@ -14,11 +14,11 @@ angular.module('clouddataFrontendApp')
 			$scope.myTreeData = Restangular.stripRestangular(orgs);
 
 		});
-		
+
 		Restangular.all("org").getList().then(function(orgs) {
 			$scope.orgs = Restangular.stripRestangular(orgs);
 		});
-		
+
 		$scope.save = function() {
 			delete $scope.neworg.pname;
 			Restangular.all("org").post($scope.neworg).then(function(response) {

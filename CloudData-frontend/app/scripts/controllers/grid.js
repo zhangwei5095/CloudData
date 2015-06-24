@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('DataCtrl', function($scope, $rootScope, $stateParams,Meta, $http, Restangular) {
+	.controller('DataCtrl', function($scope, $rootScope, $state, $stateParams, Meta, $http, Restangular) {
 		$scope.realData = [];
 		$scope.mid = $stateParams.mid;
 		$rootScope.mid = $stateParams.mid;
 
 		Meta.selectMid($stateParams.mid);
-		$rootScope.mfs=Meta.getMFS();
-		$rootScope.views=Meta.getViews();
-		
+		$rootScope.mfs = Meta.getMFS();
+		$rootScope.views = Meta.getViews();
+
 
 		$scope.filterOptions = {
 			filterText: "",
@@ -18,7 +18,7 @@ angular.module('clouddataFrontendApp')
 		$scope.totalServerItems = 100;
 
 		$scope.pagingOptions = {
-			paginationPageSizes: [10, 20, 50,100],
+			paginationPageSizes: [10, 20, 50, 100],
 			paginationPageSize: 10,
 			totalServerItems: 10,
 			paginationCurrentPage: 1
@@ -33,14 +33,14 @@ angular.module('clouddataFrontendApp')
 			}
 		};
 
-		$scope.getPagedDataAsync = function(mid,vid,pageSize, page, searchText) {
+		$scope.getPagedDataAsync = function(mid, vid, pageSize, page, searchText) {
 			setTimeout(function() {
 				var data;
 				if (searchText) {
 					var ft = searchText.toLowerCase();
 					Restangular.all('data/rv').getList({
 						mid: mid,
-						vid:vid,
+						vid: vid,
 						page: page,
 						pagesize: pageSize
 					}).then(function(queryData) {
@@ -50,7 +50,7 @@ angular.module('clouddataFrontendApp')
 				} else {
 					Restangular.all('data/rv').getList({
 						mid: mid,
-						vid:vid,
+						vid: vid,
 						page: page,
 						pagesize: pageSize
 					}).then(function(queryData) {
@@ -73,15 +73,21 @@ angular.module('clouddataFrontendApp')
 				$scope.getPagedDataAsync($scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage, $scope.filterOptions.filterText);
 			}
 		}, true);
-
+		$scope.mySelections = [];
 		$scope.gridOptions = {
 			data: 'realData',
 			columnDefs: [],
 			enablePagination: true,
-			paginationPageSizes: [10, 20, 50,100],
+			paginationPageSizes: [10, 20, 50, 100],
 			paginationPageSize: 10,
 			totalServerItems: 10,
-			paginationCurrentPage: 1
+			paginationCurrentPage: 1,
+			onRegisterApi: function(gridApi) {
+				$scope.gridApi = gridApi;
+				gridApi.selection.on.rowSelectionChanged($scope, function(rows) {
+					$scope.mySelections = gridApi.selection.getSelectedRows();
+				});
+			}
 		};
 		angular.forEach(Meta.getMFS(), function(mf) {
 			var columnDef = {
@@ -90,9 +96,15 @@ angular.module('clouddataFrontendApp')
 			};
 			$scope.gridOptions.columnDefs.push(columnDef);
 		});
+		$scope.update = function() {
+			$scope.vid = $scope.selectedItem.id;
+			$scope.getPagedDataAsync($scope.mid, $scope.vid, $scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage, '');
+		}
 
-		$scope.update=function(){
-			$scope.vid=$scope.selectedItem.id;
-   			$scope.getPagedDataAsync($scope.mid,$scope.vid,$scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage,'');
+		$scope.edit = function() {
+			$state.go('app.formly', {
+				mid: $scope.mid,
+				rid: $scope.mySelections[0]._id
+			});
 		}
 	});

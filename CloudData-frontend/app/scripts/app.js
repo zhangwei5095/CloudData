@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap','restangular','angularBootstrapNavTree','ui.grid',
-    'ui.grid.pagination','ui.select','formly'])
+angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangular', 'angularBootstrapNavTree', 'ui.grid',
+  'ui.grid.pagination','ui.grid.selection', 'ui.select', 'formly'
+])
 // principal is a service that tracks the user's identity. 
 // calling identity() returns a promise while it does what you need it to do
 // to look up the signed-in user's identity info. for example, it could make an 
@@ -25,9 +26,9 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap','restangular
 
         return _identity.roles.indexOf(role) != -1;
       },
-      isAdmin:function(){
+      isAdmin: function() {
         var myidentity = angular.fromJson(localStorage.getItem("clouddataFrontendApp.identity"));
-        return myidentity.roles.indexOf('admin')!=-1;
+        return myidentity.roles.indexOf('admin') != -1;
       },
       isInAnyRole: function(roles) {
         if (!_authenticated || !_identity.roles) return false;
@@ -41,7 +42,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap','restangular
       authenticate: function(identity) {
         _identity = identity;
         _authenticated = identity != null;
-        
+
         // for this demo, we'll store the identity in localStorage. For you, it could be a cookie, sessionStorage, whatever
         if (identity) localStorage.setItem("clouddataFrontendApp.identity", angular.toJson(identity));
         else localStorage.removeItem("clouddataFrontendApp.identity");
@@ -140,12 +141,12 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap','restangular
     });
 
   })
-  
-  .config(function(uiSelectConfig) {
-    //uiSelectConfig.search-enabled=true;
-    uiSelectConfig.theme = 'bootstrap';
-    uiSelectConfig.resetSearchInput = true;
-  })
+
+.config(function(uiSelectConfig) {
+  //uiSelectConfig.search-enabled=true;
+  uiSelectConfig.theme = 'bootstrap';
+  uiSelectConfig.resetSearchInput = true;
+})
   .config(function(RestangularProvider) {
     RestangularProvider.setBaseUrl('http://localhost:8080/rest/');
   })
@@ -166,17 +167,17 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap','restangular
       }).state('app', {
         url: '/app',
         data: {
-          roles: ['User','admin']
+          roles: ['User', 'admin']
         },
-            templateUrl: 'views/main.html',
-            controller: 'MainCtrl'
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl'
       }).state('signin', {
         url: '/signin',
         data: {
           roles: []
         },
-            templateUrl: 'views/login.html',
-            controller: 'SigninCtrl'
+        templateUrl: 'views/login.html',
+        controller: 'SigninCtrl'
       }).state('restricted', {
         parent: 'site',
         url: '/restricted',
@@ -206,53 +207,53 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap','restangular
         },
         templateUrl: 'views/user.html',
         controller: 'UserCtrl'
-       }).state('app.org', {
+      }).state('app.org', {
         url: '/org',
         data: {
           roles: ['admin']
         },
         templateUrl: 'views/org.html',
         controller: 'OrgCtrl'
-       }).state('app.role', {
+      }).state('app.role', {
         url: '/role',
         data: {
           roles: ['admin']
         },
         templateUrl: 'views/role.html',
         controller: 'RoleCtrl'
-       }).state('app.mt', {
+      }).state('app.mt', {
         url: '/mt',
         data: {
           roles: ['admin']
         },
         templateUrl: 'views/mt.html',
         controller: 'MtCtrl'
-       }).state('app.data', {
+      }).state('app.data', {
         url: '/data/:mid',
         data: {
           roles: ['admin']
         },
         templateUrl: 'views/grid.html',
         controller: 'DataCtrl'
-       }).state('app.formly', {
-        url: '/formly/:mid',
+      }).state('app.formly', {
+        url: '/formly/:mid/:rid',
         data: {
           roles: ['admin']
         },
         templateUrl: 'views/formly.html',
         controller: 'FormlyCtrl'
-       }).state('app.query', {
+      }).state('app.query', {
         url: '/query/:mid/:vid',
         data: {
           roles: ['admin']
         },
         templateUrl: 'views/query.html',
         controller: 'QueryCtrl'
-       });
+      });
     }
   ])
-.config(function($httpProvider) {
-    
+  .config(function($httpProvider) {
+
     // $httpProvider.interceptors.push(function($q, $rootScope, $location) {
     //   return {
     //     'responseError': function(rejection) {

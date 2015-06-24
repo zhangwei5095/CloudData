@@ -1,7 +1,11 @@
 <section class="content-header"><label>查询:</label><select ng-options="view as view.viewName for view in views" ng-model="selectedItem" ng-change="update()" >
 </select> <a ui-sref="app.query({mid:mid})">新建查询</a><a ui-sref="app.query({mid:mid,vid:vid})">编辑</a>
 </section>
-<a ui-sref="app.formly({mid:mid})" class="btn btn-default">新建</a></section>
+<a ui-sref="app.formly({mid:mid})" class="btn btn-primary">新建</a>
+<a ng-click="detail()" class="btn btn-info">查看</a>
+<a ng-click="edit()" class="btn btn-success">编辑</a>
+<a ng-click="delete()" class="btn btn-danger">删除</a></section>
 
-<div style="width: 600px; height: 300px;"   ui-grid="gridOptions" ui-grid-pagination="pagingOptions">
+<div style="width: 600px; height: 300px;"   ui-grid="gridOptions" ui-grid-selection ui-grid-pagination="pagingOptions">
 </div>
+<pre>{{mySelections}}</pre>

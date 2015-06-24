@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-    .controller('RoleCtrl', function($scope, $rootScope,$state,Meta, $timeout, $location, Restangular) {
-        $scope.mts=Meta.getMTS();
+    .controller('RoleCtrl', function($scope, $rootScope, $state, Meta, $timeout, $location, Restangular) {
+        $scope.mts = Meta.getMTS();
         $scope.roleId = {};
         $scope.newrole = {};
         $scope.roleMTs = [];
