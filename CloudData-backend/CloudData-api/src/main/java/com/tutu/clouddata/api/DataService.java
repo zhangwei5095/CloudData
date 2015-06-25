@@ -10,7 +10,7 @@ import com.tutu.clouddata.dto.datatable.DataTableDTO;
 public interface DataService {
 	void delete(String tid, String id);
 
-	void create(String mid, HttpServletRequest request);
+	void save(String mid,String rid, HttpServletRequest request);
 	
 	Map<String, Object> read(String mid,String rid);
 	

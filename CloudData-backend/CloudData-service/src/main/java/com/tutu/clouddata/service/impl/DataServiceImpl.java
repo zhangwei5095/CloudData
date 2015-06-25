@@ -23,6 +23,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.alibaba.dubbo.common.json.ParseException;
 import com.mongodb.BasicDBObject;
@@ -56,7 +57,7 @@ public class DataServiceImpl extends BasicService implements DataService {
 	@POST
 	@Path("/c")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void create(@QueryParam("mid") String mid, @Context HttpServletRequest request) {
+	public void save(@QueryParam("mid") String mid, @QueryParam("rid") String rid, @Context HttpServletRequest request) {
 		Map<String, String> postData = null;
 		try {
 			postData = com.alibaba.dubbo.common.json.JSON.parse(request.getReader(), Map.class);
@@ -66,7 +67,11 @@ public class DataServiceImpl extends BasicService implements DataService {
 			e.printStackTrace();
 		}
 		MT mt = mtService.mt(mid);
-		save(mt, postData);
+		if (StringUtils.isEmpty(rid)) {
+			save(mt, postData);
+		} else {
+			update(mt, rid, postData);
+		}
 		logger.debug(postData.toString());
 	}
 
@@ -130,6 +135,19 @@ public class DataServiceImpl extends BasicService implements DataService {
 		getCollection(mt.getId()).save(dbObject);
 	}
 
+	private void update(MT mt, String rid, Map<String, String> dataMap) {
+		DBObject q = new BasicDBObject();
+		q.put("_id", new ObjectId(rid));
+		DBObject dbObject = new BasicDBObject();
+		dbObject.put("update_by", ContextHolder.getContext().getUser().getName());
+		dbObject.put("update_at", new Date());
+		for (MF mf : mt.getMfs()) {
+			mf.setStringValue(String.valueOf(dataMap.get(mf.getKey())));
+			dbObject.put(mf.getKey(), mf.getRawValue());
+		}
+		getCollection(mt.getId()).update(q, dbObject);
+	}
+
 	@GET
 	@Path("/rv")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -164,7 +182,7 @@ public class DataServiceImpl extends BasicService implements DataService {
 	@Path("/r")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> read(@QueryParam("mid") String mid, @QueryParam("rid") String rid) {
-		DBObject dbObject =getCollection(mid).findOne(new ObjectId(rid));
+		DBObject dbObject = getCollection(mid).findOne(new ObjectId(rid));
 		return dbObject.toMap();
 	}
 

@@ -249,6 +249,13 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         },
         templateUrl: 'views/query.html',
         controller: 'QueryCtrl'
+      }).state('app.detail', {
+        url: '/detail/:mid/:rid',
+        data: {
+          roles: ['admin']
+        },
+        templateUrl: 'views/detail.html',
+        controller: 'DetailCtrl'
       });
     }
   ])

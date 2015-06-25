@@ -13,7 +13,10 @@ angular.module('clouddataFrontendApp')
     $scope.rid = $stateParams.rid;
     $scope.formData = {};
     if ($scope.rid) {
-      $scope.formData=Restangular.stripRestangular(Restangular.one("data/r?mid=" + $scope.mid + "&rid=" + $scope.rid).get());
+      Restangular.one("data/r?mid=" + $scope.mid + "&rid=" + $scope.rid).get().then(function(data) {
+        $scope.formData = Restangular.stripRestangular(data);
+      });
+
     }
     angular.forEach($rootScope.mts, function(mt) {
       if (mt.id === $stateParams.mid)
@@ -127,7 +130,8 @@ angular.module('clouddataFrontendApp')
       $scope.submittedData = $scope.formData;
       console.log($scope.submittedData);
       Restangular.all('data/c').post($scope.submittedData, {
-        mid: $stateParams.mid
+        mid: $scope.mid,
+        rid: $scope.rid
       }).then(function(response) {
         $state.go('app.data', {
           mid: $stateParams.mid

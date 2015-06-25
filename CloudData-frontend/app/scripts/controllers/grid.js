@@ -101,6 +101,13 @@ angular.module('clouddataFrontendApp')
 			$scope.getPagedDataAsync($scope.mid, $scope.vid, $scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage, '');
 		}
 
+		$scope.detail = function() {
+			$state.go('app.detail', {
+				mid: $scope.mid,
+				rid: $scope.mySelections[0]._id
+			});
+		}
+
 		$scope.edit = function() {
 			$state.go('app.formly', {
 				mid: $scope.mid,
