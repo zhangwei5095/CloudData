@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangular', 'angularBootstrapNavTree', 'ui.grid',
-  'ui.grid.pagination','ui.grid.selection', 'ui.select', 'formly'
+  'ui.grid.pagination', 'ui.grid.selection', 'ui.select', 'formly'
 ])
 // principal is a service that tracks the user's identity. 
 // calling identity() returns a promise while it does what you need it to do
@@ -256,6 +256,17 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         },
         templateUrl: 'views/detail.html',
         controller: 'DetailCtrl'
+      }).state('app.detail.relationObj', {
+        url: '/detailRel/:rmid/:roid',
+        data: {
+          roles: ['admin']
+        },
+        views: {
+          '': {
+            templateUrl: 'views/detailRel.html',
+            controller: 'DetailRelCtrl'
+          }
+        }
       });
     }
   ])

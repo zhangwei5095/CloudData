@@ -23,7 +23,7 @@ public class MT {
 	private String name;
 	private List<MF> mfs;
 	private List<View> views;
-	private List<String> relationObjs; 
+	private List<Relation> relationObjs; 
 	public MT() {
 	}
 
@@ -63,11 +63,11 @@ public class MT {
 		this.views = views;
 	}
 
-	public List<String> getRelationObjs() {
+	public List<Relation> getRelationObjs() {
 		return relationObjs;
 	}
 
-	public void setRelationObjs(List<String> relationObjs) {
+	public void setRelationObjs(List<Relation> relationObjs) {
 		this.relationObjs = relationObjs;
 	}
 

@@ -14,6 +14,8 @@ public interface UserService {
 	public List<User> all();
 
 	public TokenTransfer authenticate(String username, String password);
+	
+	void signUp(String orgName,String userName,String password);
 
 	void save(User user);
 }

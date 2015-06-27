@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -31,6 +30,7 @@ import com.tutu.clouddata.model.MFJsonViews;
 import com.tutu.clouddata.model.MFRelation;
 import com.tutu.clouddata.model.MFText;
 import com.tutu.clouddata.model.MT;
+import com.tutu.clouddata.model.Relation;
 import com.tutu.clouddata.service.BasicService;
 
 @Service("mtService")
@@ -80,7 +80,7 @@ public class MTServiceImpl extends BasicService implements MTService {
 		}
 		BeanUtils.copyProperties(mf, rmf);
 		if(mf.getFieldType().equals(FieldType.RELATION))
-			updateRelaionObj(mtid,mf.getRelationObj());
+			updateRelaionObj(mtid,mf.getKey(),mf.getRelationObj());
 		createMF(mtid, rmf);
 	}
 
@@ -92,11 +92,14 @@ public class MTServiceImpl extends BasicService implements MTService {
 		getDataStore().update(updateQuery, ops);
 	}
 
-	private void updateRelaionObj(String mid, String relationObj) {
+	private void updateRelaionObj(String mid, String key,String relationObj) {
+		Relation relation=new Relation();
+		relation.setRelationObject(mid);
+		relation.setRelationObjId(key);
 		Query<MT> updateQuery = getDataStore().createQuery(MT.class)
 				.field("_id").equal(relationObj);
 		UpdateOperations<MT> ops = getDataStore().createUpdateOperations(
-				MT.class).add("relationObjs", mid);
+				MT.class).add("relationObjs", relation);
 		getDataStore().update(updateQuery, ops);
 	}
 

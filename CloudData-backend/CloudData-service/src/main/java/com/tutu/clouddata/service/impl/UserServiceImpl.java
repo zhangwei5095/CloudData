@@ -3,8 +3,10 @@ package com.tutu.clouddata.service.impl;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.ws.rs.Consumes;
@@ -27,6 +29,7 @@ import com.tutu.clouddata.context.ContextHolder;
 import com.tutu.clouddata.dto.TokenTransfer;
 import com.tutu.clouddata.dto.UserTransfer;
 import com.tutu.clouddata.dto.auth.AccessToken;
+import com.tutu.clouddata.dto.auth.Tenant;
 import com.tutu.clouddata.dto.auth.User;
 import com.tutu.clouddata.session.PwdUtils;
 import com.tutu.clouddata.session.TokenUtils;
@@ -64,11 +67,13 @@ public class UserServiceImpl implements UserService {
 	@Path("authenticate")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public TokenTransfer authenticate(@FormParam("username") String username, @FormParam("password") String password) {
+	public TokenTransfer authenticate(@FormParam("username") String username,
+			@FormParam("password") String password) {
 		User user = systemDatastore.get(User.class, username);
 		String token = null;
 		try {
-			if (user == null || !user.getPassword().equals(PwdUtils.eccrypt(password))) {
+			if (user == null
+					|| !user.getPassword().equals(PwdUtils.eccrypt(password))) {
 				throw new WebApplicationException(401);
 			} else {
 				token = TokenUtils.createToken(user);
@@ -81,10 +86,39 @@ public class UserServiceImpl implements UserService {
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("some thing wrong", e);
 		}
-		TokenTransfer tokenTransfer=new TokenTransfer(token);
-		tokenTransfer.setRoles(user.getRoles().toArray(new String[user.getRoles().size()]));
+		TokenTransfer tokenTransfer = new TokenTransfer(token);
+		tokenTransfer.setRoles(user.getRoles().toArray(
+				new String[user.getRoles().size()]));
 		tokenTransfer.setName(user.getName());
 		return tokenTransfer;
+	}
+
+	@Path("signup")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public void signUp(@FormParam("orgname") String orgname,
+			@FormParam("username") String username,
+			@FormParam("password") String password) {
+		Tenant tenant = systemDatastore.get(Tenant.class, orgname);
+		User user = systemDatastore.get(User.class, username);
+		if (tenant != null || user != null)
+			throw new WebApplicationException(401);
+		tenant = new Tenant();
+		tenant.setName(orgname);
+		user = new User();
+		user.setName(username);
+		try {
+			user.setPassword(PwdUtils.eccrypt(password));
+		} catch (NoSuchAlgorithmException e) {
+			logger.error("加密出错!",e);
+		}
+		user.setTenant(tenant);
+		user.setOrgId("1");
+		Set<String> roles=new HashSet<String>();
+		roles.add("admin");
+		user.setRoles(roles);
+		systemDatastore.save(tenant);
+		systemDatastore.save(user);
 	}
 
 	private Map<String, Boolean> createRoleMap(User user) {
@@ -119,4 +153,5 @@ public class UserServiceImpl implements UserService {
 		}
 		systemDatastore.save(user);
 	}
+
 }

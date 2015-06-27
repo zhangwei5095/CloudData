@@ -3,6 +3,7 @@
 	angular.module('clouddataFrontendApp')
 		.controller('SigninCtrl', function($scope, $state, principal, Restangular) {
 			$scope.user = {};
+			$scope.newuser = {};
 			$scope.signin = function() {
 				Restangular.all("user/authenticate").withHttpConfig({
 					transformRequest: angular.identity
@@ -20,4 +21,15 @@
 						else $state.go('app');
 					});
 			};
+
+			$scope.signup = function() {
+				Restangular.all("user/signup").withHttpConfig({
+					transformRequest: angular.identity
+				})
+					.customPOST("orgname=" + $scope.newuser.orgname + "&username=" + $scope.newuser.email + "&password=" + $scope.newuser.password, undefined, undefined, {
+						'Content-Type': "application/x-www-form-urlencoded"
+					}).then(function(tokenTransfer) {
+						$state.go('signin');
+					});
+			}
 		});
