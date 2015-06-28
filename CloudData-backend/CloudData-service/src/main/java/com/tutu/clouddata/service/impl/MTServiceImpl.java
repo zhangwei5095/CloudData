@@ -27,6 +27,7 @@ import com.tutu.clouddata.dto.View;
 import com.tutu.clouddata.model.FieldType;
 import com.tutu.clouddata.model.MF;
 import com.tutu.clouddata.model.MFJsonViews;
+import com.tutu.clouddata.model.MFMultiSelect;
 import com.tutu.clouddata.model.MFRelation;
 import com.tutu.clouddata.model.MFText;
 import com.tutu.clouddata.model.MT;
@@ -75,12 +76,15 @@ public class MTServiceImpl extends BasicService implements MTService {
 		case RELATION:
 			rmf = new MFRelation();
 			break;
+		case MULTISELECT:
+			rmf = new MFMultiSelect();
+			break;
 		default:
 			break;
 		}
 		BeanUtils.copyProperties(mf, rmf);
-		if(mf.getFieldType().equals(FieldType.RELATION))
-			updateRelaionObj(mtid,mf.getKey(),mf.getRelationObj());
+		if (mf.getFieldType().equals(FieldType.RELATION))
+			updateRelaionObj(mtid, mf.getKey(), mf.getRelationObj());
 		createMF(mtid, rmf);
 	}
 
@@ -92,8 +96,8 @@ public class MTServiceImpl extends BasicService implements MTService {
 		getDataStore().update(updateQuery, ops);
 	}
 
-	private void updateRelaionObj(String mid, String key,String relationObj) {
-		Relation relation=new Relation();
+	private void updateRelaionObj(String mid, String key, String relationObj) {
+		Relation relation = new Relation();
 		relation.setRelationObject(mid);
 		relation.setRelationObjId(key);
 		Query<MT> updateQuery = getDataStore().createQuery(MT.class)

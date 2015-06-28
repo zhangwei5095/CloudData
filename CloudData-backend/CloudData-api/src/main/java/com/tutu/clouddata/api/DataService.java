@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tutu.clouddata.dto.data.SearchResult;
 import com.tutu.clouddata.dto.datatable.DataTableDTO;
 
 public interface DataService {
@@ -25,4 +26,6 @@ public interface DataService {
 
 	List<Map<String, Object>> readRelData(String mid, String rid, String rmid,
 			String roid);
+
+	List<SearchResult> readSearchData(String mid);
 }

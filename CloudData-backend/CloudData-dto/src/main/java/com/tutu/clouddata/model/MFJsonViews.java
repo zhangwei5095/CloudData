@@ -11,6 +11,7 @@ public class MFJsonViews {
 	protected String defaultValue;
 
 	protected String stringValue;
+	protected String options;
 	private String type;
 	private FieldType fieldType;
 	private String relationObj;
@@ -85,5 +86,13 @@ public class MFJsonViews {
 	public void setType(String type) {
 		this.type = type;
 		setFieldType(FieldType.fromType(type));
+	}
+
+	public String getOptions() {
+		return options;
+	}
+
+	public void setOptions(String options) {
+		this.options = options;
 	}
 }

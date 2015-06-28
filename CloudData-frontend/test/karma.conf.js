@@ -41,6 +41,8 @@ module.exports = function(config) {
       'bower_components/jQuery-QueryBuilder/dist/js/query-builder.js',
       'bower_components/bootstrap-duallistbox/src/jquery.bootstrap-duallistbox.js',
       'bower_components/ui-router/release/angular-ui-router.js',
+      'bower_components/Chart.js/Chart.js',
+      'bower_components/angular-chart.js/dist/angular-chart.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

@@ -50,6 +50,14 @@
 							</select>
 						</div>
 					</div>
+					<div class="form-group" ng-show="newmf.type==='select' || newmf.type==='multiselect'">
+						<label for="options" class="col-sm-2 control-label">选项值</label>
+
+						<div class="col-sm-10">
+						<textarea ng-model="newmf.options" class="form-control" id="options"></textarea>
+						<p id="options_description" class="help-block">键值以|分隔，选项以回车分隔，如：<br/>男|1<br/>女|0</p>
+						</div>
+					</div>
 					<div class="form-group" >
 						<label for="key" class="col-sm-2 control-label">字段KEY</label>
 

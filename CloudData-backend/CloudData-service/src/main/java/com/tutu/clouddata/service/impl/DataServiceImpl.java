@@ -35,6 +35,7 @@ import com.tutu.clouddata.api.DataService;
 import com.tutu.clouddata.api.MTService;
 import com.tutu.clouddata.context.ContextHolder;
 import com.tutu.clouddata.dto.View;
+import com.tutu.clouddata.dto.data.SearchResult;
 import com.tutu.clouddata.dto.datatable.DataTableDTO;
 import com.tutu.clouddata.model.MF;
 import com.tutu.clouddata.model.MT;
@@ -222,5 +223,26 @@ public class DataServiceImpl extends BasicService implements DataService {
 			data.add(dbObject.toMap());
 		}
 		return data;
+	}
+
+	@GET
+	@Path("/rs")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SearchResult> readSearchData(@QueryParam("mid") String mid) {
+		List<SearchResult> searchResults = new ArrayList<SearchResult>();
+		SearchResult searchResult = null;
+		String[] childUserIds = getChildUserIds();
+		DBObject query = new BasicDBObject();
+		query.putAll(QueryBuilder.start("create_by").in(childUserIds).get());
+		DBCursor cursor = getCollection(mid).find(query);
+		while (cursor.hasNext()) {
+			searchResult = new SearchResult();
+			DBObject dbObject = cursor.next();
+			searchResult.setId(dbObject.get("_id").toString());
+			searchResult.setKey(dbObject.get("name").toString());
+			searchResult.setLabel(dbObject.get("name").toString());
+			searchResults.add(searchResult);
+		}
+		return searchResults;
 	}
 }

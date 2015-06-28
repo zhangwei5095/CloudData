@@ -8,7 +8,7 @@
  * Controller of the clouddataFrontendApp
  */
 angular.module('clouddataFrontendApp')
-  .controller('FormlyCtrl', function($scope, $rootScope, $state, $stateParams, $location, Restangular) {
+  .controller('FormlyCtrl', function($scope, $rootScope, $state, $stateParams, Meta, $location, Restangular) {
     $scope.mid = $stateParams.mid;
     $scope.rid = $stateParams.rid;
     $scope.formData = {};
@@ -18,13 +18,21 @@ angular.module('clouddataFrontendApp')
       });
 
     }
-    angular.forEach($rootScope.mts, function(mt) {
-      if (mt.id === $stateParams.mid)
-        $scope.mfs = mt.mfs;
+    $scope.formFields = Meta.getMFSByMid($scope.mid);
+    angular.forEach($scope.formFields, function(mf) {
+      if (mf.type === 'relation') {
+        mf['options'] = [];
+        Restangular.all("data/rs?mid=" + mf.relationObj).getList().then(function(data) {
+          mf['options'] = Restangular.stripRestangular(data);
+        });
+      }
     });
 
-    $scope.formFields = $scope.mfs;
-
+    $scope.onselect = function(item, model) {
+      console.log(item);
+      console.log(model);
+      //$scope.formData
+    };
 
     $scope.formFields2 = [{
       id: null,
@@ -138,4 +146,33 @@ angular.module('clouddataFrontendApp')
         });
       });
     }
-  });
+  }).filter('propsFilter', function() {
+    return function(items, props) {
+      var out = [];
+
+      if (angular.isArray(items)) {
+        items.forEach(function(item) {
+          var itemMatches = false;
+
+          var keys = Object.keys(props);
+          for (var i = 0; i < keys.length; i++) {
+            var prop = keys[i];
+            var text = props[prop].toLowerCase();
+            if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+              itemMatches = true;
+              break;
+            }
+          }
+
+          if (itemMatches) {
+            out.push(item);
+          }
+        });
+      } else {
+        // Let the output be the input untouched
+        out = items;
+      }
+
+      return out;
+    };
+  });;
