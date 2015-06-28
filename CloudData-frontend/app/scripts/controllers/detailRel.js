@@ -14,7 +14,7 @@ angular.module('clouddataFrontendApp')
 			$scope.rid = $stateParams.rid;
 			$scope.rmid = $stateParams.rmid;
 			$scope.roid = $stateParams.roid;
-			$scope.mfs = Meta.getMFS();
+			$scope.mfs = Meta.getMFSByMid($scope.mid);
 
 			Restangular.one("data/rr?mid=" + $scope.mid + "&rid=" + $scope.rid + "&rmid=" + $scope.rmid + "&roid=" + $scope.roid).get().then(function(data) {
 				$scope.data = Restangular.stripRestangular(data);

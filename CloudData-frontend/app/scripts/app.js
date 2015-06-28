@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangular', 'angularBootstrapNavTree', 'ui.grid',
-  'ui.grid.pagination', 'ui.grid.selection', 'ui.select', 'formly','chart.js'
+  'ui.grid.pagination', 'ui.grid.selection', 'ui.select', 'formly', 'chart.js'
 ])
 // principal is a service that tracks the user's identity. 
 // calling identity() returns a promise while it does what you need it to do
@@ -101,7 +101,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
           .then(function() {
             var isAuthenticated = principal.isAuthenticated();
 
-            if ($rootScope.toState.data.roles && $rootScope.toState.data.roles.length > 0 && !principal.isInAnyRole($rootScope.toState.data.roles)) {
+            if (($rootScope.toState.data.roles && $rootScope.toState.data.roles.length === 0) || ($rootScope.toState.data.roles.length > 0 && !principal.isInAnyRole($rootScope.toState.data.roles))) {
               if (isAuthenticated) $state.go('accessdenied'); // user is signed in but not authorized for desired state
               else {
                 // user is not authenticated. stow the state they wanted before you
@@ -230,7 +230,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         templateUrl: 'views/mt.html',
         controller: 'MtCtrl'
       }).state('app.data', {
-        url: '/data/:mid',
+        url: '/data/:mid?vid',
         data: {
           roles: ['admin']
         },
@@ -301,7 +301,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
           var isRestCall = config.url.indexOf('rest') > 0;
           var authToken = localStorage.getItem("clouddataFrontendApp.token");
           if (!isRestCall && !authToken) {
-            $location.path("/login");
+            $location.path('signin');
           }
           if (isRestCall && authToken) {
             config.headers['X-Auth-Token'] = authToken;

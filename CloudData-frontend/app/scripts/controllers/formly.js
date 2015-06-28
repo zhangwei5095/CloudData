@@ -16,7 +16,6 @@ angular.module('clouddataFrontendApp')
       Restangular.one("data/r?mid=" + $scope.mid + "&rid=" + $scope.rid).get().then(function(data) {
         $scope.formData = Restangular.stripRestangular(data);
       });
-
     }
     $scope.formFields = Meta.getMFSByMid($scope.mid);
     angular.forEach($scope.formFields, function(mf) {

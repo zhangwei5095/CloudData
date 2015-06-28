@@ -12,18 +12,15 @@ angular.module('clouddataFrontendApp')
 		function($scope, $rootScope, $state, principal, Meta, Restangular, $location) {
 			$scope.principal = principal;
 			$scope.menus = [];
-			$rootScope.mts = [];
-
-			Restangular.all('mt').getList().then(function(mts) {
-				Meta.loadMTS(Restangular.stripRestangular(mts));
-				angular.forEach(Meta.getMTS(), function(mt) {
-					var menu = {
-						name: mt.name,
-						href: mt.id
-					};
-					$scope.menus.push(menu);
-				});
+			Meta.setMTS();
+			angular.forEach(Meta.getMTS(), function(mt) {
+				var menu = {
+					name: mt.name,
+					href: mt.id
+				};
+				$scope.menus.push(menu);
 			});
+
 
 			$scope.getClass = function(path) {
 				if ($location.path().substr(0, path.length) == path) {

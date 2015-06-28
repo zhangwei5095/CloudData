@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clouddataFrontendApp')
-	.controller('QueryCtrl', function($scope, $rootScope, $stateParams, Meta, $http, Restangular) {
+	.controller('QueryCtrl', function($scope, $state, $rootScope, $stateParams, Meta, $http, Restangular) {
 		var dc_options = '';
 		var qb_filters = [];
 		var rules_basic = null;
@@ -69,7 +69,14 @@ angular.module('clouddataFrontendApp')
 				mtid: $scope.mid,
 				vid: $scope.vid
 			}).then(function(response) {
-
+				Restangular.stripRestangular(response);
+				$scope.vid = response.id;
+				view['id'] = $scope.vid;
+				Meta.addView($scope.mid, view);
+				$state.go('app.data', {
+					mid: $scope.mid,
+					vid: $scope.vid
+				});
 			});
 		});
 

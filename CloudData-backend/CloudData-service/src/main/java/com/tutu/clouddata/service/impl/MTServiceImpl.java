@@ -110,7 +110,7 @@ public class MTServiceImpl extends BasicService implements MTService {
 	@Path("view")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void saveView(View view, @QueryParam("mtid") String mtid,
+	public View saveView(View view, @QueryParam("mtid") String mtid,
 			@QueryParam("vid") String vid) {
 		view.setCreateDate(new Date());
 		view.setCreator(ContextHolder.getContext().getUser());
@@ -133,6 +133,7 @@ public class MTServiceImpl extends BasicService implements MTService {
 					MT.class).add("views", view);
 			getDataStore().update(updateQuery, ops2);
 		}
+		return view;
 	}
 
 	@Path("delete/mt/{mtid}/view/{vid}")

@@ -4,11 +4,10 @@ angular.module('clouddataFrontendApp')
 	.controller('DataCtrl', function($scope, $rootScope, $state, $stateParams, Meta, $http, Restangular) {
 		$scope.realData = [];
 		$scope.mid = $stateParams.mid;
-		$rootScope.mid = $stateParams.mid;
+		$scope.vid = $stateParams.vid;
+		$scope.views = Meta.getViewsByMid($scope.mid);
+		if (!$scope.vid) $scope.vid = $scope.views[0].id;
 
-		Meta.selectMid($stateParams.mid);
-		$rootScope.mfs = Meta.getMFS();
-		$rootScope.views = Meta.getViews();
 
 
 		$scope.filterOptions = {
@@ -89,7 +88,7 @@ angular.module('clouddataFrontendApp')
 				});
 			}
 		};
-		angular.forEach(Meta.getMFS(), function(mf) {
+		angular.forEach(Meta.getMFSByMid($scope.mid), function(mf) {
 			var columnDef = {
 				field: mf.key,
 				displayName: mf.label
@@ -97,8 +96,10 @@ angular.module('clouddataFrontendApp')
 			$scope.gridOptions.columnDefs.push(columnDef);
 		});
 		$scope.update = function() {
-			$scope.vid = $scope.selectedItem.id;
-			$scope.getPagedDataAsync($scope.mid, $scope.vid, $scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage, '');
+			$state.go('app.data', {
+				mid: $scope.mid,
+				vid: $scope.vid
+			});
 		}
 
 		$scope.detail = function() {
@@ -114,7 +115,7 @@ angular.module('clouddataFrontendApp')
 				rid: $scope.mySelections[0]._id
 			});
 		}
-
+		$scope.getPagedDataAsync($scope.mid, $scope.vid, $scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage, '');
 		$scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
 		$scope.data = [300, 500, 100];
 	});

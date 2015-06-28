@@ -1,59 +1,69 @@
 'use strict';
 angular.module('clouddataFrontendApp')
- .factory('Meta',function(){
- 	var mts={};
- 	var mid={};
- 	var metaService={};
- 	metaService.loadMTS =function (p_mts){
- 		angular.forEach(p_mts, function(mt) {
- 			mts[mt.id]=mt;
- 		})
- 	}
- 	metaService.getMTS=function(){
- 		return mts;
- 	}
- 	metaService.getMTByMid = function (p_mid){
- 		return mts[p_mid];
- 	}
+	.factory('Meta', function($rootScope, $q, $timeout, Restangular) {
+		var mts = null;
+		return {
+			getMTS: function() {
+				if (!mts) mts = angular.fromJson(localStorage.getItem("clouddataFrontendApp.metaData"));
+				return mts;
+			},
+			setMTS: function() {
+				Restangular.all('mt').getList().then(function(data) {
+					var mtData = Restangular.stripRestangular(data);
+					mts = {};
+					angular.forEach(mtData, function(mt) {
+						mts[mt.id] = mt;
+					})
+					localStorage.setItem("clouddataFrontendApp.metaData", angular.toJson(mts));
+				})
+			},
+			getMTByMid: function(p_mid) {
+				return mts[p_mid];
+			},
 
- 	metaService.getMFSByMid = function (p_mid){
- 		return mts[p_mid].mfs;
- 	}
+			getMFSByMid: function(p_mid) {
+				return mts[p_mid].mfs;
+			},
 
- 	metaService.getViewsByMid =function(p_mid){
- 		return mts[p_mid].views;
- 	}
+			getViewsByMid: function(p_mid) {
+				return mts[p_mid].views;
+			},
 
- 	metaService.selectMid=function (p_mid){
- 		mid=p_mid;
- 	}
+			selectMid: function(p_mid) {
+				mid = p_mid;
+			},
+			getMFS: function() {
+				return this.getMFSByMid(mid);
+			},
 
- 	metaService.getMFS= function (){
- 		return this.getMFSByMid(mid);
- 	}
+			getViews: function() {
+				return this.getViewsByMid(mid);
+			},
 
- 	metaService.getViews = function(){
- 		return this.getViewsByMid(mid);
- 	}
+			getViewByMidVid: function(mid, vid) {
+				var _view;
+				angular.forEach(this.getViewsByMid(mid), function(view) {
+					if (vid === view.id) {
+						_view = view;
+						return _view;
+					}
+				})
+				return _view;
+			},
+			addView: function(p_mid, p_view) {
+				var metadata = angular.fromJson(localStorage.getItem("clouddataFrontendApp.metaData"));
+				if (metadata) {
+					metadata[p_mid].views.push(p_view);
+					localStorage.setItem("clouddataFrontendApp.metaData", angular.toJson(metadata));
+				}
 
- 	metaService.getViewByMidVid = function(mid,vid){
- 		var _view;
- 		angular.forEach(this.getViewsByMid(mid), function(view) {
- 			if(vid===view.id){
- 				_view=view;
- 				return _view;
- 			}
- 		})	
- 		return _view;
- 	}
-
- 	function getMFByKey(key){
- 		var mfs=getMFS();
- 		angular.forEach(mfs, function(mf) {
- 			if(key===mf.key)
- 				return mf;
- 		})
- 	}
-
- 	return metaService;
- });
+			},
+			getMFByKey: function(key) {
+				var mfs = getMFS();
+				angular.forEach(mfs, function(mf) {
+					if (key === mf.key)
+						return mf;
+				})
+			}
+		};
+	});
