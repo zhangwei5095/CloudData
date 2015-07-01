@@ -16,7 +16,8 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
 
     return {
       isIdentityResolved: function() {
-        return angular.isDefined(_identity);
+        if(_identity) return true;
+        return false;
       },
       isAuthenticated: function() {
         return _authenticated;
@@ -28,9 +29,10 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
       },
       isAdmin: function() {
         var myidentity = angular.fromJson(localStorage.getItem("clouddataFrontendApp.identity"));
-        return myidentity.roles.indexOf('admin') != -1;
+        return myidentity && myidentity.roles.indexOf('admin') != -1;
       },
       isInAnyRole: function(roles) {
+        if(roles.indexOf('*')>0) return true;
         if (!_authenticated || !_identity.roles) return false;
 
         for (var i = 0; i < roles.length; i++) {
@@ -53,7 +55,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         if (force === true) _identity = undefined;
 
         // check and see if we have retrieved the identity data from the server. if we have, reuse it by immediately resolving
-        if (angular.isDefined(_identity)) {
+        if (_identity) {
           deferred.resolve(_identity);
 
           return deferred.promise;
@@ -101,7 +103,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
           .then(function() {
             var isAuthenticated = principal.isAuthenticated();
 
-            if (($rootScope.toState.data.roles && $rootScope.toState.data.roles.length === 0) || ($rootScope.toState.data.roles.length > 0 && !principal.isInAnyRole($rootScope.toState.data.roles))) {
+            if ($rootScope.toState.data.roles.length > 0 && !principal.isInAnyRole($rootScope.toState.data.roles)) {
               if (isAuthenticated) $state.go('accessdenied'); // user is signed in but not authorized for desired state
               else {
                 // user is not authenticated. stow the state they wanted before you
@@ -175,7 +177,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
       }).state('signin', {
         url: '/signin',
         data: {
-          roles: []
+          roles: ['*']
         },
         templateUrl: 'views/login.html',
         controller: 'SigninCtrl'
@@ -194,7 +196,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         parent: 'site',
         url: '/denied',
         data: {
-          roles: []
+          roles: ['*']
         },
         views: {
           'content@': {
@@ -299,8 +301,9 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         'request': function(config) {
 
           var isRestCall = config.url.indexOf('rest') > 0;
+          var identity=localStorage.getItem("clouddataFrontendApp.identity");
           var authToken = localStorage.getItem("clouddataFrontendApp.token");
-          if (!isRestCall && !authToken) {
+          if (!isRestCall && (!identity || !authToken)) {
             $location.path('signin');
           }
           if (isRestCall && authToken) {

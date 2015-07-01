@@ -8,6 +8,7 @@ angular.module('clouddataFrontendApp')
 				return mts;
 			},
 			setMTS: function() {
+				var deferred = $q.defer(); 
 				Restangular.all('mt').getList().then(function(data) {
 					var mtData = Restangular.stripRestangular(data);
 					mts = {};
@@ -15,7 +16,9 @@ angular.module('clouddataFrontendApp')
 						mts[mt.id] = mt;
 					})
 					localStorage.setItem("clouddataFrontendApp.metaData", angular.toJson(mts));
+					deferred.resolve();
 				})
+				return deferred.promise;
 			},
 			getMTByMid: function(p_mid) {
 				return mts[p_mid];

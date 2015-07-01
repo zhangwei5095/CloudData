@@ -12,23 +12,17 @@ angular.module('clouddataFrontendApp')
 		function($scope, $rootScope, $state, principal, Meta, Restangular, $location) {
 			$scope.principal = principal;
 			$scope.menus = [];
-			Meta.setMTS();
-			angular.forEach(Meta.getMTS(), function(mt) {
-				var menu = {
-					name: mt.name,
-					href: mt.id
-				};
-				$scope.menus.push(menu);
+			var promise = Meta.setMTS();
+			promise.then(function(){
+				angular.forEach(Meta.getMTS(), function(mt) {
+					var menu = {
+						name: mt.name,
+						href: mt.id
+					};
+					$scope.menus.push(menu);
+				});
 			});
-
-
-			$scope.getClass = function(path) {
-				if ($location.path().substr(0, path.length) == path) {
-					return "active"
-				} else {
-					return ""
-				}
-			}
+			
 			$scope.signout = function() {
 				principal.authenticate(null);
 				$state.go('signin');

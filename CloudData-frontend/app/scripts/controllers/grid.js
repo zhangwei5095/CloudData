@@ -88,13 +88,18 @@ angular.module('clouddataFrontendApp')
 				});
 			}
 		};
-		angular.forEach(Meta.getMFSByMid($scope.mid), function(mf) {
-			var columnDef = {
-				field: mf.key,
-				displayName: mf.label
-			};
-			$scope.gridOptions.columnDefs.push(columnDef);
-		});
+		var displayColumn = Meta.getViewByMidVid($scope.mid, $scope.vid).displayColumn;
+		var displayColumns = displayColumn.split(',');
+		angular.forEach(Meta.getMFSByMid($scope.mid),
+			function(mf) {
+				if (displayColumns.indexOf(mf.key) > 0) {
+					var columnDef = {
+						field: mf.key,
+						displayName: mf.label
+					};
+					$scope.gridOptions.columnDefs.push(columnDef);
+				}
+			});
 		$scope.update = function() {
 			$state.go('app.data', {
 				mid: $scope.mid,
