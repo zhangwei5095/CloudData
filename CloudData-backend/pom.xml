@@ -12,7 +12,6 @@
 	<modules>
 		<module>CloudData-api</module>
 		<module>CloudData-server</module>
-		<module>CloudData-server</module>
 		<module>CloudData-dto</module>
 		<module>CloudData-dao</module>
     <module>CloudData-service</module>
