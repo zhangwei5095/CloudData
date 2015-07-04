@@ -29,7 +29,6 @@ import com.alibaba.dubbo.common.json.ParseException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.QueryBuilder;
 import com.mongodb.util.JSON;
 import com.tutu.clouddata.api.DataService;
 import com.tutu.clouddata.api.MTService;
@@ -43,6 +42,8 @@ import com.tutu.clouddata.service.BasicService;
 
 @Service("dataService")
 @Path("/data")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class DataServiceImpl extends BasicService implements DataService {
 	private static Logger logger = LoggerFactory
 			.getLogger(DataServiceImpl.class);
@@ -58,7 +59,6 @@ public class DataServiceImpl extends BasicService implements DataService {
 	@SuppressWarnings("unchecked")
 	@POST
 	@Path("/c")
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void save(@QueryParam("mid") String mid,
 			@QueryParam("rid") String rid, @Context HttpServletRequest request) {
 		Map<String, String> postData = null;
@@ -81,7 +81,6 @@ public class DataServiceImpl extends BasicService implements DataService {
 
 	@GET
 	@Path("/rg")
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Map<String, Object>> readNgGrid(@QueryParam("mid") String mid,
 			@QueryParam("page") Integer page,
 			@QueryParam("pagesize") Integer pagesize) {
@@ -162,7 +161,6 @@ public class DataServiceImpl extends BasicService implements DataService {
 
 	@GET
 	@Path("/rv")
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Map<String, Object>> readDataByVid(
 			@QueryParam("mid") String collectionName,
 			@QueryParam("vid") String vid, @QueryParam("page") Integer page,
@@ -170,10 +168,8 @@ public class DataServiceImpl extends BasicService implements DataService {
 		List<Map<String, Object>> data = new ArrayList<>();
 		View view = getView(collectionName, vid);
 		int skip = (page - 1) * pageSize;
-		String[] childUserIds = getChildUserIds();
-		DBObject query = null;
-		query = (DBObject) JSON.parse(view.getMongoScript());
-		query.putAll(QueryBuilder.start("create_by").in(childUserIds).get());
+		DBObject query = (DBObject) JSON.parse(view.getMongoScript());
+		query.putAll(getFilterDBObject());
 		DBCursor cursor = getCollection(collectionName).find(query).skip(skip)
 				.limit(pageSize);
 		while (cursor.hasNext()) {
@@ -196,7 +192,6 @@ public class DataServiceImpl extends BasicService implements DataService {
 
 	@GET
 	@Path("/r")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> read(@QueryParam("mid") String mid,
 			@QueryParam("rid") String rid) {
 		DBObject dbObject = getCollection(mid).findOne(new ObjectId(rid));
@@ -205,17 +200,14 @@ public class DataServiceImpl extends BasicService implements DataService {
 
 	@GET
 	@Path("/rr")
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Map<String, Object>> readRelData(@QueryParam("mid") String mid,
 			@QueryParam("rid") String rid, @QueryParam("rmid") String rmid,
 			@QueryParam("roid") String roid) {
 		List<Map<String, Object>> data = new ArrayList<>();
-		String[] childUserIds = getChildUserIds();
 		DBObject query = new BasicDBObject();
 		DBObject rq = new BasicDBObject();
 		rq.put(roid, rid);
-		query.putAll(QueryBuilder.start("create_by").in(childUserIds).and(rq)
-				.get());
+		query.putAll(getFilterDBObject());
 		DBCursor cursor = getCollection(rmid).find(query);
 		while (cursor.hasNext()) {
 			DBObject dbObject = cursor.next();
@@ -227,13 +219,11 @@ public class DataServiceImpl extends BasicService implements DataService {
 
 	@GET
 	@Path("/rs")
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<SearchResult> readSearchData(@QueryParam("mid") String mid) {
 		List<SearchResult> searchResults = new ArrayList<SearchResult>();
 		SearchResult searchResult = null;
-		String[] childUserIds = getChildUserIds();
 		DBObject query = new BasicDBObject();
-		query.putAll(QueryBuilder.start("create_by").in(childUserIds).get());
+		query.putAll(getFilterDBObject());
 		DBCursor cursor = getCollection(mid).find(query);
 		while (cursor.hasNext()) {
 			searchResult = new SearchResult();

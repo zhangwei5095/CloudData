@@ -5,8 +5,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <span ng-if="doingAsync">...loading...</span>
-                        <abn-tree tree-data="myTreeData" tree-control="myTree" on-select="myTreeHandler(branch)"
-                                  expand-level="2" initial-selection="Granny Smith"></abn-tree>
+                        <abn-tree tree-data="myTreeData" expand-level="2"  tree-control="myTree" on-select="myTreeHandler(branch)"
+                                  expand-level="2" initial-selection="总公司"></abn-tree>
                     </div>
                     <div class="col-md-6">
                     	<div>机构列表<div class="pull-right"><a class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#modal_dialog">新增</a></div></div>
@@ -52,7 +52,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button id="modal_btn_ok" type="button" class="btn btn-primary" data-dismiss="modal"  ng-click="save()">保存</button>
+        <button id="modal_btn_ok" type="button" class="btn btn-primary" data-dismiss="modal"  ng-click="save()" >保存</button>
       </div>
     </div>
   </div>

@@ -18,6 +18,7 @@ import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.mongodb.BasicDBObject;
@@ -44,11 +45,13 @@ public class MTServiceImpl extends BasicService implements MTService {
 		List<MT> mts = getDataStore().find(MT.class).asList();
 		for (MT mt : mts) {
 			List<View> views = mt.getViews();
-			for (Iterator<View> iter = views.iterator(); iter.hasNext();) {
-				View view = iter.next();
-				if (!view.getCreator().equals(
-						ContextHolder.getContext().getUser()))
-					iter.remove();
+			if (!CollectionUtils.isEmpty(views)) {
+				for (Iterator<View> iter = views.iterator(); iter.hasNext();) {
+					View view = iter.next();
+					if (!view.getCreator().equals(
+							ContextHolder.getContext().getUser()))
+						iter.remove();
+				}
 			}
 		}
 		return mts;

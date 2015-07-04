@@ -7,7 +7,7 @@
             <div>
                 <div class="row">
                     <div class="col-md-6">
-                        <span ng-if="doingAsync">...loading...</span>
+                        <span ng-if="doing_async">...loading...</span>
                         <abn-tree tree-data="myTreeData" tree-control="myTree" on-select="myTreeHandler(branch)"
                                   expand-level="2" initial-selection="Granny Smith"></abn-tree>
                     </div>
@@ -59,6 +59,7 @@
              	<ui-select multiple ng-model="newuser.roles">
     				<ui-select-match>{{$item.label}}</ui-select-match>
     				<ui-select-choices repeat="item.id as item in roles | filter: { label: $select.search }">
+              {{item.label}}
         				<div ng-bind-html="item.label | highlight: $select.search"></div>
     				</ui-select-choices>
 				</ui-select>

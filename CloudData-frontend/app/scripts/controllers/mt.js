@@ -19,7 +19,12 @@ angular.module('clouddataFrontendApp')
 		};
 		$scope.saveMt = function() {
 			Restangular.all('mt').post($scope.newmt).then(function(response) {
-
+				$(".modal-backdrop").hide();
+				$state.transitionTo($state.current, $stateParams, {
+					reload: true,
+					inherit: false,
+					notify: true
+				});
 			});
 		};
 		$scope.saveMf = function() {
@@ -27,7 +32,12 @@ angular.module('clouddataFrontendApp')
 			Restangular.all('mt/mf').post($scope.newmf, {
 				mtid: $scope.mtid
 			}).then(function(response) {
-
+				$(".modal-backdrop").hide();
+				$state.transitionTo($state.current, $stateParams, {
+					reload: true,
+					inherit: false,
+					notify: true
+				});
 			});
 		};
 		$scope.field_types = [{

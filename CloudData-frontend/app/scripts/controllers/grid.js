@@ -81,6 +81,7 @@ angular.module('clouddataFrontendApp')
 			paginationPageSize: 10,
 			totalServerItems: 10,
 			paginationCurrentPage: 1,
+			showSelectionCheckbox: true,
 			onRegisterApi: function(gridApi) {
 				$scope.gridApi = gridApi;
 				gridApi.selection.on.rowSelectionChanged($scope, function(rows) {

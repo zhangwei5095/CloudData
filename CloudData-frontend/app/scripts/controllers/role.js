@@ -56,7 +56,12 @@ angular.module('clouddataFrontendApp')
         };
         $scope.saveRole = function() {
             Restangular.all("role").post($scope.newrole).then(function(response) {
-                $location.path('role');
+                $(".modal-backdrop").hide();
+                $state.transitionTo($state.current, $stateParams, {
+                    reload: true,
+                    inherit: false,
+                    notify: true
+                });
             });
         }
         $scope.save = function() {
@@ -78,7 +83,12 @@ angular.module('clouddataFrontendApp')
             }
             roleMTS.roleMTs = postRoleMTs;
             Restangular.all("role/mt").post(roleMTS).then(function(response) {
-                $state.go("app.role");
+                $(".modal-backdrop").hide();
+                $state.transitionTo($state.current, $stateParams, {
+                    reload: true,
+                    inherit: false,
+                    notify: true
+                });
             });
         }
     });
