@@ -18,3 +18,6 @@ CloudData
 
 ##系统截图
    ![image](https://github.com/passionguy/CloudData/blob/master/CloudData-backend/snapshot.png)
+
+##示例站点
+  http://182.92.229.245/
