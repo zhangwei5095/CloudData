@@ -25,12 +25,10 @@ public class BasicService {
 	}
 
 	public String[] getChildUserIds() {
-		Org org = getDataStore().find(Org.class).field("id")
-				.equal(getUser().getOrgId()).get();
+		Org org = getDataStore().find(Org.class).field("id").equal(getUser().getOrgId()).get();
 		List<String> childOrgs = org.getChilds();
 		String[] orgs = childOrgs.toArray(new String[childOrgs.size()]);
-		List<User> users = getDataStore().createQuery(User.class)
-				.filter("orgId in", orgs).asList();
+		List<User> users = getDataStore().createQuery(User.class).filter("orgId in", orgs).asList();
 		String[] userIds = new String[users.size()];
 		for (int i = 0; i < users.size(); i++) {
 			userIds[i] = users.get(i).getName();
@@ -39,6 +37,6 @@ public class BasicService {
 	}
 
 	public DBObject getFilterDBObject() {
-		return QueryBuilder.start("create_by").in(getChildUserIds()).get();
+		return QueryBuilder.start("create_by").in(getChildUserIds()).and("delFlag").notEquals(true).get();
 	}
 }

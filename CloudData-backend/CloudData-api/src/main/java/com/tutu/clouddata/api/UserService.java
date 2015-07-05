@@ -18,4 +18,6 @@ public interface UserService {
 	void signUp(String orgName,String userName,String password);
 
 	void save(User user);
+	
+	boolean checkOrgName(String orgName);
 }

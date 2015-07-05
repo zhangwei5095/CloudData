@@ -11,9 +11,11 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -45,26 +47,28 @@ import com.tutu.clouddata.service.BasicService;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class DataServiceImpl extends BasicService implements DataService {
-	private static Logger logger = LoggerFactory
-			.getLogger(DataServiceImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(DataServiceImpl.class);
 	@Resource
 	private MTService mtService;
 
-	@Override
-	public void delete(String tid, String id) {
-		BasicDBObject query = new BasicDBObject("id", new ObjectId(id));
-		getCollection(tid).findAndRemove(query);
+	@DELETE
+	@Path("{tid}/{rid}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void delete(@PathParam("tid") String tid, @PathParam("rid") String rid) {
+		BasicDBObject query = new BasicDBObject("_id", new ObjectId(rid));
+		DBObject setValue = new BasicDBObject();
+		setValue.put("delFlag", true);
+		DBObject upsertValue=new BasicDBObject("$set",setValue); 
+		getCollection(tid).update(query, upsertValue,false,false);
 	}
 
 	@SuppressWarnings("unchecked")
 	@POST
 	@Path("/c")
-	public void save(@QueryParam("mid") String mid,
-			@QueryParam("rid") String rid, @Context HttpServletRequest request) {
+	public void save(@QueryParam("mid") String mid, @QueryParam("rid") String rid, @Context HttpServletRequest request) {
 		Map<String, String> postData = null;
 		try {
-			postData = com.alibaba.dubbo.common.json.JSON.parse(
-					request.getReader(), Map.class);
+			postData = com.alibaba.dubbo.common.json.JSON.parse(request.getReader(), Map.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
@@ -81,27 +85,23 @@ public class DataServiceImpl extends BasicService implements DataService {
 
 	@GET
 	@Path("/rg")
-	public List<Map<String, Object>> readNgGrid(@QueryParam("mid") String mid,
-			@QueryParam("page") Integer page,
+	public List<Map<String, Object>> readNgGrid(@QueryParam("mid") String mid, @QueryParam("page") Integer page,
 			@QueryParam("pagesize") Integer pagesize) {
 		return getData(mid, page, pagesize);
 	}
 
-	public DataTableDTO readDataTable(@QueryParam("mid") String mid,
-			@QueryParam("page") Integer page,
+	public DataTableDTO readDataTable(@QueryParam("mid") String mid, @QueryParam("page") Integer page,
 			@QueryParam("pagesize") Integer pagesize) {
 		return getDataTableData(mid, 1, 10);
 	}
 
-	private DataTableDTO getDataTableData(String collectionName, int page,
-			int pagesize) {
+	private DataTableDTO getDataTableData(String collectionName, int page, int pagesize) {
 		DataTableDTO dataTableDTO = new DataTableDTO();
 		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 		Map<String, String> rowData;
 		int skip = (page - 1) * pagesize;
 		dataTableDTO.setRecordsTotal(getCollection(collectionName).count());
-		DBCursor dbCursor = getCollection(collectionName).find().sort(null)
-				.skip(skip).limit(pagesize);
+		DBCursor dbCursor = getCollection(collectionName).find().sort(null).skip(skip).limit(pagesize);
 		Set<String> keys;
 		while (dbCursor.hasNext()) {
 			rowData = new HashMap<String, String>();
@@ -117,12 +117,10 @@ public class DataServiceImpl extends BasicService implements DataService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> getData(String collectionName, int page,
-			int pagesize) {
+	public List<Map<String, Object>> getData(String collectionName, int page, int pagesize) {
 		List<Map<String, Object>> data = new ArrayList<>();
 		int skip = (page - 1) * pagesize;
-		DBCursor dbCursor = getCollection(collectionName).find().sort(null)
-				.skip(skip).limit(pagesize);
+		DBCursor dbCursor = getCollection(collectionName).find().sort(null).skip(skip).limit(pagesize);
 		while (dbCursor.hasNext()) {
 			DBObject dbObject = dbCursor.next();
 			dbObject.put("_id", dbObject.get("_id").toString());
@@ -135,8 +133,7 @@ public class DataServiceImpl extends BasicService implements DataService {
 
 	private void save(MT mt, Map<String, String> dataMap) {
 		DBObject dbObject = new BasicDBObject();
-		dbObject.put("create_by", ContextHolder.getContext().getUser()
-				.getName());
+		dbObject.put("create_by", ContextHolder.getContext().getUser().getName());
 		dbObject.put("create_at", new Date());
 		for (MF mf : mt.getMfs()) {
 			mf.setStringValue(String.valueOf(dataMap.get(mf.getKey())));
@@ -149,8 +146,7 @@ public class DataServiceImpl extends BasicService implements DataService {
 		DBObject q = new BasicDBObject();
 		q.put("_id", new ObjectId(rid));
 		DBObject dbObject = new BasicDBObject();
-		dbObject.put("update_by", ContextHolder.getContext().getUser()
-				.getName());
+		dbObject.put("update_by", ContextHolder.getContext().getUser().getName());
 		dbObject.put("update_at", new Date());
 		for (MF mf : mt.getMfs()) {
 			mf.setStringValue(String.valueOf(dataMap.get(mf.getKey())));
@@ -161,17 +157,14 @@ public class DataServiceImpl extends BasicService implements DataService {
 
 	@GET
 	@Path("/rv")
-	public List<Map<String, Object>> readDataByVid(
-			@QueryParam("mid") String collectionName,
-			@QueryParam("vid") String vid, @QueryParam("page") Integer page,
-			@QueryParam("pagesize") Integer pageSize) {
+	public List<Map<String, Object>> readDataByVid(@QueryParam("mid") String collectionName,
+			@QueryParam("vid") String vid, @QueryParam("page") Integer page, @QueryParam("pagesize") Integer pageSize) {
 		List<Map<String, Object>> data = new ArrayList<>();
 		View view = getView(collectionName, vid);
 		int skip = (page - 1) * pageSize;
 		DBObject query = (DBObject) JSON.parse(view.getMongoScript());
 		query.putAll(getFilterDBObject());
-		DBCursor cursor = getCollection(collectionName).find(query).skip(skip)
-				.limit(pageSize);
+		DBCursor cursor = getCollection(collectionName).find(query).skip(skip).limit(pageSize);
 		while (cursor.hasNext()) {
 			DBObject dbObject = cursor.next();
 			dbObject.put("_id", dbObject.get("_id").toString());
@@ -181,8 +174,7 @@ public class DataServiceImpl extends BasicService implements DataService {
 	}
 
 	private View getView(String collectionName, String vid) {
-		MT mt = getDataStore().find(MT.class).field("_id")
-				.equal(collectionName).get();
+		MT mt = getDataStore().find(MT.class).field("_id").equal(collectionName).get();
 		for (View view : mt.getViews()) {
 			if (vid.equals(view.getId().toString()))
 				return view;
@@ -192,17 +184,15 @@ public class DataServiceImpl extends BasicService implements DataService {
 
 	@GET
 	@Path("/r")
-	public Map<String, Object> read(@QueryParam("mid") String mid,
-			@QueryParam("rid") String rid) {
+	public Map<String, Object> read(@QueryParam("mid") String mid, @QueryParam("rid") String rid) {
 		DBObject dbObject = getCollection(mid).findOne(new ObjectId(rid));
 		return dbObject.toMap();
 	}
 
 	@GET
 	@Path("/rr")
-	public List<Map<String, Object>> readRelData(@QueryParam("mid") String mid,
-			@QueryParam("rid") String rid, @QueryParam("rmid") String rmid,
-			@QueryParam("roid") String roid) {
+	public List<Map<String, Object>> readRelData(@QueryParam("mid") String mid, @QueryParam("rid") String rid,
+			@QueryParam("rmid") String rmid, @QueryParam("roid") String roid) {
 		List<Map<String, Object>> data = new ArrayList<>();
 		DBObject query = new BasicDBObject();
 		DBObject rq = new BasicDBObject();

@@ -23,12 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.tutu.clouddata.api.SequenceService;
 import com.tutu.clouddata.api.UserService;
 import com.tutu.clouddata.auth.dao.SystemDatastore;
 import com.tutu.clouddata.context.ContextHolder;
 import com.tutu.clouddata.dto.TokenTransfer;
 import com.tutu.clouddata.dto.UserTransfer;
 import com.tutu.clouddata.dto.auth.AccessToken;
+import com.tutu.clouddata.dto.auth.MM;
 import com.tutu.clouddata.dto.auth.Tenant;
 import com.tutu.clouddata.dto.auth.User;
 import com.tutu.clouddata.session.PwdUtils;
@@ -36,10 +38,13 @@ import com.tutu.clouddata.session.TokenUtils;
 
 @Service("userService")
 @Path("/user")
+@Produces(MediaType.APPLICATION_JSON)
 public class UserServiceImpl implements UserService {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Resource
 	private SystemDatastore systemDatastore;
+	@Resource
+	private SequenceService sequenceService;
 
 	/**
 	 * Retrieves the currently logged in user.
@@ -47,7 +52,6 @@ public class UserServiceImpl implements UserService {
 	 * @return A transfer containing the username and the roles.
 	 */
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	public UserTransfer getUser() {
 		User user = ContextHolder.getContext().getUser();
 		if (user == null)
@@ -95,7 +99,6 @@ public class UserServiceImpl implements UserService {
 
 	@Path("signup")
 	@POST
-	@Produces(MediaType.APPLICATION_JSON)
 	public void signUp(@FormParam("orgname") String orgname,
 			@FormParam("username") String username,
 			@FormParam("password") String password) {
@@ -105,20 +108,41 @@ public class UserServiceImpl implements UserService {
 			throw new WebApplicationException(401);
 		tenant = new Tenant();
 		tenant.setName(orgname);
+		List<MM> mms = systemDatastore.find(MM.class).asList();
+		tenant.setMm(getMMFromWeight(mms));
+		Long tenantId = sequenceService.getNextId("tenantId", 0L);
+		tenant.setDbname("t_" + tenantId);
 		user = new User();
 		user.setName(username);
 		try {
 			user.setPassword(PwdUtils.eccrypt(password));
 		} catch (NoSuchAlgorithmException e) {
-			logger.error("加密出错!",e);
+			logger.error("加密出错!", e);
 		}
 		user.setTenant(tenant);
 		user.setOrgId("1");
-		Set<String> roles=new HashSet<String>();
+		Set<String> roles = new HashSet<String>();
 		roles.add("admin");
 		user.setRoles(roles);
 		systemDatastore.save(tenant);
 		systemDatastore.save(user);
+	}
+
+	private MM getMMFromWeight(List<MM> mms) {
+		int totalweight = 0;
+		for (MM mm : mms) {
+			totalweight += mm.getWeight();
+		}
+		int randomIndex = -1;
+		double random = Math.random() * totalweight;
+		for (int i = 0; i < mms.size(); ++i) {
+			random -= mms.get(i).getWeight();
+			if (random <= 0.0d) {
+				randomIndex = i;
+				break;
+			}
+		}
+		return mms.get(randomIndex);
 	}
 
 	private Map<String, Boolean> createRoleMap(User user) {
@@ -131,7 +155,6 @@ public class UserServiceImpl implements UserService {
 
 	@Path("filterByOrg/{orgId}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<User> getUsersByOrg(@PathParam("orgId") String orgId) {
 		return systemDatastore.find(User.class, "orgId", orgId).asList();
 	}
@@ -144,7 +167,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void save(User user) {
 		try {
 			user.setPassword(PwdUtils.eccrypt(user.getPassword()));
@@ -152,6 +174,14 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 		systemDatastore.save(user);
+	}
+
+	@Path("checkOrgName/{orgName}")
+	@GET
+	public boolean checkOrgName(@PathParam("orgName") String orgName) {
+		Tenant tenant = systemDatastore.find(Tenant.class)
+				.filter("name", orgName).get();
+		return tenant != null;
 	}
 
 }

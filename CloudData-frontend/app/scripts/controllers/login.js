@@ -2,7 +2,7 @@
 
 	angular.module('clouddataFrontendApp')
 		.controller('SigninCtrl', function($scope, $state, principal, Restangular) {
-			$scope.user = {};
+			$scope.user = {username:'admin',password:'000000'};
 			$scope.newuser = {};
 			$scope.signin = function() {
 				Restangular.all("user/authenticate").withHttpConfig({
@@ -32,4 +32,22 @@
 						$state.go('signin');
 					});
 			}
-		});
+		}).directive('ngUnique', ['Restangular',
+			function(Restangular) {
+				return {
+					require: 'ngModel',
+					link: function(scope, elem, attrs, ctrl) {
+						elem.on('blur', function(evt) {
+							scope.$apply(function() {
+								Restangular.one("user/checkOrgName/" + elem.val()).get().then(function(data) {
+									var unique = true;
+									if (data === true)
+										unique = false;
+									ctrl.$setValidity('unique', unique);
+								});
+							});
+						})
+					}
+				}
+			}
+		]);

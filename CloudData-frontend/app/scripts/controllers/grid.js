@@ -121,6 +121,18 @@ angular.module('clouddataFrontendApp')
 				rid: $scope.mySelections[0]._id
 			});
 		}
+
+		$scope.delete = function() {
+			Restangular.one("data/" + $scope.mid + "/" + $scope.mySelections[0]._id).remove().then(function(response) {
+				$state.transitionTo($state.current, $stateParams, {
+					reload: true,
+					inherit: false,
+					notify: true
+				});
+			});
+		}
+
+
 		$scope.getPagedDataAsync($scope.mid, $scope.vid, $scope.pagingOptions.paginationPageSize, $scope.pagingOptions.paginationCurrentPage, '');
 		$scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
 		$scope.data = [300, 500, 100];

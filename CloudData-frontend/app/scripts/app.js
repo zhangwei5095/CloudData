@@ -16,7 +16,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
 
     return {
       isIdentityResolved: function() {
-        if(_identity) return true;
+        if (_identity) return true;
         return false;
       },
       isAuthenticated: function() {
@@ -32,7 +32,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         return myidentity && myidentity.roles.indexOf('admin') != -1;
       },
       isInAnyRole: function(roles) {
-        if(roles.indexOf('*')>0) return true;
+        if (roles.indexOf('*') > 0) return true;
         if (!_authenticated || !_identity.roles) return false;
 
         for (var i = 0; i < roles.length; i++) {
@@ -152,6 +152,12 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
 })
   .config(function(RestangularProvider) {
     RestangularProvider.setBaseUrl('http://localhost:8080/rest/');
+    RestangularProvider.setRequestInterceptor(function(elem, operation) {
+      if (operation === "remove") {
+        return undefined;
+      }
+      return elem;
+    });
   })
   .config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
@@ -301,7 +307,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         'request': function(config) {
 
           var isRestCall = config.url.indexOf('rest') > 0;
-          var identity=localStorage.getItem("clouddataFrontendApp.identity");
+          var identity = localStorage.getItem("clouddataFrontendApp.identity");
           var authToken = localStorage.getItem("clouddataFrontendApp.token");
           if (!isRestCall && (!identity || !authToken)) {
             $location.path('signin');
