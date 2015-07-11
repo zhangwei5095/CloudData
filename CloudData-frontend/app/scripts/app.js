@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangular', 'angularBootstrapNavTree', 'ui.grid',
-  'ui.grid.pagination', 'ui.grid.selection', 'ui.select', 'formly', 'chart.js'
+  'ui.grid.pagination', 'ui.grid.selection', 'ui.select', 'formly', 'formlyBootstrap'
 ])
 // principal is a service that tracks the user's identity. 
 // calling identity() returns a promise while it does what you need it to do
@@ -121,29 +121,49 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
   }
 ])
   .config(function(formlyConfigProvider) {
-    var templates = '/views/fields/';
-    var formly = templates + 'formly-field-';
-    var fields = [
-      'checkbox',
-      'email',
-      'hidden',
-      'number',
-      'password',
-      'radio',
-      'select',
-      'text',
-      'textarea',
-      'multiselect',
-      'date',
-      'time',
-      'relation'
-    ];
-
-    angular.forEach(fields, function(val) {
-      formlyConfigProvider.setTemplateUrl(val, formly + val + '.html');
+    formlyConfigProvider.setWrapper({
+      name: 'loader',
+      template: [
+        '<formly-transclude></formly-transclude>',
+        '<span class="glyphicon glyphicon-refresh loader" ng-show="to.loading"></span>'
+      ].join(' ')
     });
 
+    formlyConfigProvider.setType({
+      name: 'input-loader',
+      extends: 'input',
+      wrapper: ['loader']
+    });
+
+    formlyConfigProvider.setWrapper({
+      template: '<formly-transclude></formly-transclude><div my-messages="options"></div>',
+      types: ['input', 'checkbox', 'select', 'textarea', 'radio', 'input-loader']
+    });
   })
+// .config(function(formlyConfigProvider) {
+//   var templates = '/views/fields/';
+//   var formly = templates + 'formly-field-';
+//   var fields = [
+//     'checkbox',
+//     'email',
+//     'hidden',
+//     'number',
+//     'password',
+//     'radio',
+//     'select',
+//     'text',
+//     'textarea',
+//     'multiselect',
+//     'date',
+//     'time',
+//     'relation'
+//   ];
+
+//   angular.forEach(fields, function(val) {
+//     formlyConfigProvider.setTemplateUrl(val, formly + val + '.html');
+//   });
+
+// })
 
 .config(function(uiSelectConfig) {
   //uiSelectConfig.search-enabled=true;
@@ -329,4 +349,138 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         if (principal.isIdentityResolved()) authorization.authorize();
       });
     }
-  ]);
+  ]).run(function(formlyConfig) {
+    var attributes = [
+      'date-disabled',
+      'custom-class',
+      'show-weeks',
+      'starting-day',
+      'init-date',
+      'min-mode',
+      'max-mode',
+      'format-day',
+      'format-month',
+      'format-year',
+      'format-day-header',
+      'format-day-title',
+      'format-month-title',
+      'year-range',
+      'shortcut-propagation',
+      'datepicker-popup',
+      'show-button-bar',
+      'current-text',
+      'clear-text',
+      'close-text',
+      'close-on-date-selection',
+      'datepicker-append-to-body'
+    ];
+
+    var bindings = [
+      'datepicker-mode',
+      'min-date',
+      'max-date'
+    ];
+
+    var ngModelAttrs = {};
+
+    angular.forEach(attributes, function(attr) {
+      ngModelAttrs[camelize(attr)] = {
+        attribute: attr
+      };
+    });
+
+    angular.forEach(bindings, function(binding) {
+      ngModelAttrs[camelize(binding)] = {
+        bound: binding
+      };
+    });
+
+    formlyConfig.setType({
+      name: 'datepicker',
+      template: '<input class="form-control" ng-model="model[options.key]" is-open="to.isOpen" datepicker-options="to.datepickerOptions" />',
+      wrapper: ['bootstrapLabel', 'bootstrapHasError'],
+      defaultOptions: {
+        ngModelAttrs: ngModelAttrs,
+        templateOptions: {
+          addonLeft: {
+            class: 'glyphicon glyphicon-calendar',
+            onClick: function(options, scope) {
+              options.templateOptions.isOpen = !options.templateOptions.isOpen;
+            }
+          },
+          onFocus: function($viewValue, $modelValue, scope) {
+            scope.to.isOpen = !scope.to.isOpen;
+          },
+          datepickerOptions: {}
+        }
+      }
+    });
+
+    function camelize(string) {
+      string = string.replace(/[\-_\s]+(.)?/g, function(match, chr) {
+        return chr ? chr.toUpperCase() : '';
+      });
+      // Ensure 1st char is always lowercase
+      return string.replace(/^([A-Z])/, function(match, chr) {
+        return chr ? chr.toLowerCase() : '';
+      });
+    }
+  }).run(function(formlyConfig) {
+
+    /*
+  ngModelAttrs stuff
+  */
+
+    var ngModelAttrs = {};
+
+    function camelize(string) {
+      string = string.replace(/[\-_\s]+(.)?/g, function(match, chr) {
+        return chr ? chr.toUpperCase() : '';
+      });
+      // Ensure 1st char is always lowercase
+      return string.replace(/^([A-Z])/, function(match, chr) {
+        return chr ? chr.toLowerCase() : '';
+      });
+    }
+
+    /*
+  timepicker
+  */
+
+    ngModelAttrs = {};
+
+    // attributes
+    angular.forEach([
+      'meridians',
+      'readonly-input',
+      'mousewheel',
+      'arrowkeys'
+    ], function(attr) {
+      ngModelAttrs[camelize(attr)] = {
+        attribute: attr
+      };
+    });
+
+    // bindings
+    angular.forEach([
+      'hour-step',
+      'minute-step',
+      'show-meridian'
+    ], function(binding) {
+      ngModelAttrs[camelize(binding)] = {
+        bound: binding
+      };
+    });
+
+    formlyConfig.setType({
+      name: 'timepicker',
+      template: '<timepicker ng-model="model[options.key]"></timepicker>',
+      wrapper: ['bootstrapLabel', 'bootstrapHasError'],
+      defaultOptions: {
+        ngModelAttrs: ngModelAttrs,
+        templateOptions: {
+          datepickerOptions: {}
+        }
+      }
+    });
+  });
