@@ -2,10 +2,11 @@ package com.tutu.clouddata.model;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonValue;
 
 public enum FieldType {
 	TEXT("text"),
+	EMAIL("email"),
+	URL("url"),
 	NUMBER("number"),
 	DATE("date"),
 	TIME("time"),

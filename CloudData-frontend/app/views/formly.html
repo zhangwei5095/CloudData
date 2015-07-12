@@ -1,6 +1,6 @@
-<form ng-submit="onSubmit()" novalidate>
+<form name="editForm" ng-submit="onSubmit()" novalidate>
 		<formly-form model="formData" fields="formFields">
-		<button type="submit" class="btn btn-primary submit-button">保存</button>
+		<button type="submit" class="btn btn-primary submit-button" ng-disabled="editForm.$invalid">保存</button>
 	</formly-form>
 </form>
 <script type="text/ng-template" id="custom-messages.html">

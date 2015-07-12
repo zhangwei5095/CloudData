@@ -32,7 +32,9 @@ angular.module('starter')
 
   $scope.login = function(data) {
     AuthService.login(data.username, data.password).then(function(authenticated) {
-      $state.go('main.dash', {}, {reload: true});
+      $state.go('main.home', {}, {
+        reload: true
+      });
       $scope.setCurrentUsername(data.username);
     }, function(err) {
       var alertPopup = $ionicPopup.alert({
@@ -43,21 +45,118 @@ angular.module('starter')
   };
 })
 
-.controller('DashCtrl', function($scope,$rootScope, $state, $http, $ionicPopup, AuthService,Restangular) {
+.controller('HomeCtrl', function($scope, $rootScope, Meta, $state, $http, $ionicPopup, AuthService, Restangular) {
   $scope.logout = function() {
     AuthService.logout();
     $state.go('login');
   };
-  $scope.menus = [];
-  Restangular.all('mt').getList().then(function(mts) {
-        $rootScope.mts = Restangular.stripRestangular(mts);
-        angular.forEach($rootScope.mts, function(mt) {
-          var menu = {
-            name: mt.name,
-            href: 'data/' + mt.id
-          };
-          $scope.menus.push(menu);
+  $rootScope.menus = [];
+  Meta.setMTS().then(function() {
+    angular.forEach(Meta.getMTS(), function(mt) {
+      var menu = {
+        name: mt.name,
+        href: mt.id
+      };
+      $rootScope.menus.push(menu);
+    });
+  });
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+}).controller('ListCtrl', function($scope, $rootScope, Meta, $state, $stateParams, $http, $ionicPopup, AuthService, Restangular) {
+  $scope.realData = [];
+  $scope.mid = $stateParams.mid;
+  $scope.vid = $stateParams.vid;
+  $scope.views = Meta.getViewsByMid($scope.mid);
+  if (!$scope.vid) $scope.vid = $scope.views[0].id;
+
+  // getPagedDataAsync 
+  $scope.getPagedDataAsync = function(mid, vid, pageSize, page, searchText) {
+    setTimeout(function() {
+      var data;
+      if (searchText) {
+        var ft = searchText.toLowerCase();
+        Restangular.all('data/rv').getList({
+          mid: mid,
+          vid: vid,
+          page: page,
+          pagesize: pageSize
+        }).then(function(queryData) {
+          $scope.realData = Restangular.stripRestangular(queryData);
+          //$scope.setPagingData($scope.realData, page, pageSize);
         });
-      });
-    
+      } else {
+        Restangular.all('data/rv').getList({
+          mid: mid,
+          vid: vid,
+          page: page,
+          pagesize: pageSize
+        }).then(function(queryData) {
+          var datas= Restangular.stripRestangular(queryData);
+          angular.forEach(datas,function(data){
+            var rowdata={};
+            angular.forEach(displayColumns,function(column){
+              if(data[column] && data[column]!=null)
+                rowdata[column]=data[column];
+            });
+            $scope.realData.push(rowdata);
+          })
+        });
+      }
+    }, 100);
+  };
+  // display column
+  var displayColumn = Meta.getViewByMidVid($scope.mid, $scope.vid).displayColumn;
+  var displayColumns = displayColumn.split(',');
+  $scope.columnDefs = [];
+  angular.forEach(Meta.getMFSByMid($scope.mid),
+    function(mf) {
+      if (displayColumns.indexOf(mf.key) > 0) {
+        var columnDef = {
+          field: mf.key,
+          displayName: mf.label
+        };
+        $scope.columnDefs.push(columnDef);
+      }
+    });
+  $scope.getPagedDataAsync($scope.mid, $scope.vid, 10, 1, '');
+
+
+  // table sorting
+  $scope.predicate = 'descricao';
+  $scope.desc = false;
+
+
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+
+  $scope.sort = function(key) {
+    if ($scope.predicate == key)
+      $scope.desc = !$scope.desc;
+    else
+      $scope.predicate = key;
+  }
+
+  var adjusting = false;
+
+  $scope.scrollMirror = function(from, to) {
+    if (adjusting) {
+      adjusting = false;
+    } else {
+      // Mirroring zoom level
+      var zoomFrom = $ionicScrollDelegate.$getByHandle(from).getScrollView().getValues().zoom;
+      var zoomTo = $ionicScrollDelegate.$getByHandle(to).getScrollView().getValues().zoom;
+
+      if (zoomFrom != zoomTo) {
+        $ionicScrollDelegate.$getByHandle(to).getScrollView().zoomTo(zoomFrom);
+      }
+
+      // Mirroring left position
+      $ionicScrollDelegate.$getByHandle(to).scrollTo($ionicScrollDelegate.$getByHandle(from).getScrollPosition().left,
+        $ionicScrollDelegate.$getByHandle(to).getScrollPosition().top);
+
+      adjusting = true;
+    }
+  }
 });

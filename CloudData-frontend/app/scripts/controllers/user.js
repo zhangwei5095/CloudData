@@ -52,6 +52,7 @@ angular.module('clouddataFrontendApp')
 		}
 		$scope.gridOptions = {
 			data: 'users',
+			plugins: [new ngGridFlexibleHeightPlugin()],
 			columnDefs: [{
 				field: 'name',
 				displayName: '用户名'

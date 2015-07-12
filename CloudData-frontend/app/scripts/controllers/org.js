@@ -44,6 +44,7 @@ angular.module('clouddataFrontendApp')
 
 		$scope.gridOptions = {
 			data: 'orgs',
+			plugins: [new ngGridFlexibleHeightPlugin()],
 			columnDefs: [{
 				field: 'id',
 				displayName: 'ID'
@@ -51,5 +52,6 @@ angular.module('clouddataFrontendApp')
 				field: 'label',
 				displayName: '机构名'
 			}]
+
 		};
 	});

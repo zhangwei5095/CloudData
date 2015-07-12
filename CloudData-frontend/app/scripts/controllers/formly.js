@@ -25,9 +25,11 @@ angular.module('clouddataFrontendApp')
         type: null,
         templateOptions: {
           label: mf.label,
-          placeholder: mf.placeholder
+          required:mf.required
         }
       };
+      if(mf.placeholder)
+        field.templateOptions.placeholder=mf.placeholder;
       switch (mf.type) {
         case "text":
           field.type = 'input';

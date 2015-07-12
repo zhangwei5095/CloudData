@@ -16,7 +16,7 @@
     "angular-ui-select": "~0.11.2",
     "restangular": "~1.5.1",
     "angular-bootstrap-nav-tree": "*",
-    "angular-ui-grid": "~3.0.0-rc.21",
+    "ng-grid": "2.0.11",
     "jQuery-QueryBuilder": "~2.1.0",
     "bootstrap-duallistbox": "~3.0.2",
     "ui-router": "~0.2.15",

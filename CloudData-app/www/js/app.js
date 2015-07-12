@@ -38,16 +38,25 @@ angular.module('starter', ['ionic','restangular'])
     abstract: true,
     templateUrl: 'templates/main.html'
   })
-  .state('main.dash', {
-    url: 'main/dash',
+  .state('main.home', {
+    url: 'main/home',
     views: {
-        'dash-tab': {
-          templateUrl: 'templates/dashboard.html',
-          controller: 'DashCtrl'
+        'appContent': {
+          templateUrl: 'templates/home.html',
+          controller: 'HomeCtrl'
         }
     }
   })
-  $urlRouterProvider.otherwise('/main/dash');
+  .state('main.data', {
+    url: 'main/data/:mid',
+    views: {
+        'appContent': {
+          templateUrl: 'templates/list.html',
+          controller: 'ListCtrl'
+        }
+    }
+  })
+  $urlRouterProvider.otherwise('/main/home');
 
 }).config(function(RestangularProvider) {
     RestangularProvider.setBaseUrl('http://localhost:8080/rest/');
