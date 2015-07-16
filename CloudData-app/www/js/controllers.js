@@ -60,16 +60,20 @@ angular.module('starter')
       $rootScope.menus.push(menu);
     });
   });
+  $scope.views = Meta.getViewsByMid($scope.mid);
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
 }).controller('ListCtrl', function($scope, $rootScope, Meta, $state, $stateParams, $http, $ionicPopup, AuthService, Restangular) {
+  var vm = $scope.vm = {};
   $scope.realData = [];
   $scope.mid = $stateParams.mid;
-  $scope.vid = $stateParams.vid;
+  vm.vid = $stateParams.vid;
   $scope.views = Meta.getViewsByMid($scope.mid);
-  if (!$scope.vid) $scope.vid = $scope.views[0].id;
+  if (!vm.vid) vm.vid = $scope.views[0].id;
 
+  var displayColumn = Meta.getViewByMidVid($scope.mid, vm.vid).displayColumn;
+  var displayColumns = displayColumn.split(',');
   // getPagedDataAsync 
   $scope.getPagedDataAsync = function(mid, vid, pageSize, page, searchText) {
     setTimeout(function() {
@@ -92,12 +96,12 @@ angular.module('starter')
           page: page,
           pagesize: pageSize
         }).then(function(queryData) {
-          var datas= Restangular.stripRestangular(queryData);
-          angular.forEach(datas,function(data){
-            var rowdata={};
-            angular.forEach(displayColumns,function(column){
-              if(data[column] && data[column]!=null)
-                rowdata[column]=data[column];
+          var datas = Restangular.stripRestangular(queryData);
+          angular.forEach(datas, function(data) {
+            var rowdata = {};
+            angular.forEach(displayColumns, function(column) {
+              if (data[column] && data[column] != null)
+                rowdata[column] = data[column];
             });
             $scope.realData.push(rowdata);
           })
@@ -106,21 +110,24 @@ angular.module('starter')
     }, 100);
   };
   // display column
-  var displayColumn = Meta.getViewByMidVid($scope.mid, $scope.vid).displayColumn;
-  var displayColumns = displayColumn.split(',');
-  $scope.columnDefs = [];
-  angular.forEach(Meta.getMFSByMid($scope.mid),
-    function(mf) {
-      if (displayColumns.indexOf(mf.key) > 0) {
-        var columnDef = {
-          field: mf.key,
-          displayName: mf.label
-        };
-        $scope.columnDefs.push(columnDef);
-      }
-    });
-  $scope.getPagedDataAsync($scope.mid, $scope.vid, 10, 1, '');
+  $scope.loadByMidVid = function(mid, vid) {
+    displayColumn = Meta.getViewByMidVid($scope.mid, vm.vid).displayColumn;
+    displayColumns = displayColumn.split(',');
+    $scope.columnDefs = [];
+    angular.forEach(Meta.getMFSByMid(mid),
+      function(mf) {
+        if (displayColumns.indexOf(mf.key) > 0) {
+          var columnDef = {
+            field: mf.key,
+            displayName: mf.label
+          };
+          $scope.columnDefs.push(columnDef);
+        }
+      });
+    $scope.getPagedDataAsync(mid, vid, 10, 1, '');
+  }
 
+  $scope.loadByMidVid($scope.mid, vm.vid);
 
   // table sorting
   $scope.predicate = 'descricao';
@@ -130,7 +137,9 @@ angular.module('starter')
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
-
+  $scope.update = function() {
+    $scope.loadByMidVid($scope.mid, vm.vid);
+  }
   $scope.sort = function(key) {
     if ($scope.predicate == key)
       $scope.desc = !$scope.desc;

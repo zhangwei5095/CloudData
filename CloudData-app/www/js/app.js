@@ -48,7 +48,7 @@ angular.module('starter', ['ionic','restangular'])
     }
   })
   .state('main.data', {
-    url: 'main/data/:mid',
+    url: 'main/data/:mid/:vid',
     views: {
         'appContent': {
           templateUrl: 'templates/list.html',
