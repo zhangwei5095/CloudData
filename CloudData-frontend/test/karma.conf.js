@@ -19,7 +19,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // bower:js
-      'bower_components/jquery/jquery.js',
+      'bower_components/jquery/dist/jquery.js',
       'bower_components/angular/angular.js',
       'bower_components/bootstrap/dist/js/bootstrap.js',
       'bower_components/angular-animate/angular-animate.js',
@@ -32,7 +32,7 @@ module.exports = function(config) {
       'bower_components/angular-formly/dist/formly.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/angular-ui-select/dist/select.js',
-      'bower_components/lodash/lodash.js',
+      'bower_components/lodash/dist/lodash.compat.js',
       'bower_components/restangular/dist/restangular.js',
       'bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
       'bower_components/ng-grid/build/ng-grid.js',
@@ -42,6 +42,7 @@ module.exports = function(config) {
       'bower_components/bootstrap-duallistbox/src/jquery.bootstrap-duallistbox.js',
       'bower_components/ui-router/release/angular-ui-router.js',
       'bower_components/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
+      'bower_components/store-js/store.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

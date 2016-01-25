@@ -4,7 +4,7 @@ angular.module('clouddataFrontendApp')
 		var mts = null;
 		return {
 			getMTS: function() {
-				if (!mts) mts = angular.fromJson(localStorage.getItem("clouddataFrontendApp.metaData"));
+				if (!mts) mts = angular.fromJson(store.get("clouddataFrontendApp.metaData"));
 				return mts;
 			},
 			setMTS: function() {
@@ -15,7 +15,7 @@ angular.module('clouddataFrontendApp')
 					angular.forEach(mtData, function(mt) {
 						mts[mt.id] = mt;
 					})
-					localStorage.setItem("clouddataFrontendApp.metaData", angular.toJson(mts));
+					store.set("clouddataFrontendApp.metaData", angular.toJson(mts));
 					deferred.resolve();
 				})
 				return deferred.promise;
@@ -54,10 +54,10 @@ angular.module('clouddataFrontendApp')
 				return _view;
 			},
 			addView: function(p_mid, p_view) {
-				var metadata = angular.fromJson(localStorage.getItem("clouddataFrontendApp.metaData"));
+				var metadata = angular.fromJson(store.get("clouddataFrontendApp.metaData"));
 				if (metadata) {
 					metadata[p_mid].views.push(p_view);
-					localStorage.setItem("clouddataFrontendApp.metaData", angular.toJson(metadata));
+					store.set("clouddataFrontendApp.metaData", angular.toJson(metadata));
 				}
 
 			},

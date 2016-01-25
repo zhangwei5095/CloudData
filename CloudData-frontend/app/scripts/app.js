@@ -27,7 +27,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         return _identity.roles.indexOf(role) != -1;
       },
       isAdmin: function() {
-        var myidentity = angular.fromJson(localStorage.getItem("clouddataFrontendApp.identity"));
+        var myidentity = angular.fromJson(store.get("clouddataFrontendApp.identity"));
         return myidentity && myidentity.roles.indexOf('admin') != -1;
       },
       isInAnyRole: function(roles) {
@@ -45,8 +45,8 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         _authenticated = identity != null;
 
         // for this demo, we'll store the identity in localStorage. For you, it could be a cookie, sessionStorage, whatever
-        if (identity) localStorage.setItem("clouddataFrontendApp.identity", angular.toJson(identity));
-        else localStorage.removeItem("clouddataFrontendApp.identity");
+        if (identity) store.set("clouddataFrontendApp.identity", angular.toJson(identity));
+        else store.remove("clouddataFrontendApp.identity");
       },
       identity: function(force) {
         var deferred = $q.defer();
@@ -77,7 +77,7 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         // i put it in a timeout to illustrate deferred resolution
         var self = this;
         $timeout(function() {
-          _identity = angular.fromJson(localStorage.getItem("clouddataFrontendApp.identity"));
+          _identity = angular.fromJson(store.get("clouddataFrontendApp.identity"));
           self.authenticate(_identity);
           deferred.resolve(_identity);
         }, 1000);
@@ -326,8 +326,8 @@ angular.module('clouddataFrontendApp', ['ui.router', 'ui.bootstrap', 'restangula
         'request': function(config) {
 
           var isRestCall = config.url.indexOf('rest') > 0;
-          var identity = localStorage.getItem("clouddataFrontendApp.identity");
-          var authToken = localStorage.getItem("clouddataFrontendApp.token");
+          var identity = store.get("clouddataFrontendApp.identity");
+          var authToken = store.get("clouddataFrontendApp.token");
           if (!isRestCall && (!identity || !authToken)) {
             $location.path('signin');
           }

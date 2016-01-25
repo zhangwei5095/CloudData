@@ -16,7 +16,7 @@
 							name: tokenTransfer.name,
 							roles: tokenTransfer.roles
 						});
-						localStorage.setItem("clouddataFrontendApp.token", tokenTransfer.token);
+						store.set("clouddataFrontendApp.token", tokenTransfer.token);
 						if ($scope.returnToState) $state.go($scope.returnToState.name, $scope.returnToStateParams);
 						else $state.go('app');
 					});

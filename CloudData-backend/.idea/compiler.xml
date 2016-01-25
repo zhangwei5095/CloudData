@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <resourceExtensions />
+    <wildcardResourcePatterns>
+      <entry name="!?*.java" />
+      <entry name="!?*.form" />
+      <entry name="!?*.class" />
+      <entry name="!?*.groovy" />
+      <entry name="!?*.scala" />
+      <entry name="!?*.flex" />
+      <entry name="!?*.kt" />
+      <entry name="!?*.clj" />
+      <entry name="!?*.aj" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Annotation profile for CloudData-api" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="CloudData-api" />
+      </profile>
+      <profile default="false" name="Annotation profile for CloudData-server" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="CloudData-server" />
+      </profile>
+      <profile default="false" name="Annotation profile for CloudData-dto" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="CloudData-dto" />
+      </profile>
+      <profile default="false" name="Annotation profile for CloudData-dao" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="CloudData-dao" />
+      </profile>
+      <profile default="false" name="Annotation profile for CloudData-service" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="CloudData-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.7">
+      <module name="CloudData" target="1.7" />
+      <module name="CloudData-api" target="1.7" />
+      <module name="CloudData-dao" target="1.7" />
+      <module name="CloudData-dto" target="1.7" />
+      <module name="CloudData-server" target="1.7" />
+      <module name="CloudData-service" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
