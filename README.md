@@ -21,3 +21,6 @@ CloudData
 
 ##示例站点
   http://182.92.229.245/
+
+##wiki
+ https://github.com/passionguy/CloudData/wiki
