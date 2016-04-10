@@ -18,15 +18,55 @@
 		if (loginInfo.password.length < 6) {
 			return callback('密码最短为 6 个字符');
 		}
-		var users = JSON.parse(localStorage.getItem('$users') || '[]');
-		var authed = users.some(function(user) {
-			return loginInfo.account == user.account && loginInfo.password == user.password;
+
+		mui.ajax('http://182.92.229.245:8080/rest/user/authenticate', {
+			data: {
+				username: loginInfo.account,
+				password: loginInfo.password
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为10秒；
+			success: function(data) {
+				var state = owner.getState();
+				state.account = loginInfo.account;
+				state.token = data.token;
+				owner.setState(state);
+//				jQuery.ajaxSetup({
+//					beforeSend: function(xhr) {
+//						xhr.setRequestHeader('X-Auth-Token', state.token);　　　　
+//					}
+//				});
+				mui.ajax('http://182.92.229.245:8080/rest/mt',{
+					dataType: 'json',
+					type: 'get',
+					headers: {
+						'X-Auth-Token': state.token
+					},
+					success: function(data) {
+						localStorage.setItem('$clouddataFrontendApp.metaData', JSON.stringify(data));
+						return callback();
+					}
+				});
+//				mui.get('http://182.92.229.245:8080/rest/mt', function(data) {
+//					localStorage.setItem('$clouddataFrontendApp.metaData', JSON.stringify(data));
+//					return callback();
+//				}, 'json');
+			},
+			error: function(xhr, type, errorThrown) {
+				//异常处理；
+				return callback('用户名或密码错误');
+			}
 		});
-		if (authed) {
-			return owner.createState(loginInfo.account, callback);
-		} else {
-			return callback('用户名或密码错误');
-		}
+		//		var users = JSON.parse(localStorage.getItem('$users') || '[]');
+		//		var authed = users.some(function(user) {
+		//			return loginInfo.account == user.account && loginInfo.password == user.password;
+		//		});
+		//		if (authed) {
+		//			return owner.createState(loginInfo.account, callback);
+		//		} else {
+		//			return callback('用户名或密码错误');
+		//		}
 	};
 
 	owner.createState = function(name, callback) {
